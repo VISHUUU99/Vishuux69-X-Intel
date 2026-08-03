@@ -1376,7 +1376,7 @@
     <!-- ENTRY -->
     <div id="entry">
         <canvas id="entry-canvas"></canvas>
-        <div class="e-ds l" id="ds-l">01001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 11010010</div>
+        <div class="e-ds l" id="ds-l">01001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 11010010</div>
         <div class="e-ds r" id="ds-r">01001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 01110010</div>
         <div class="e-cross" style="inset:0"></div>
         <div class="e-cross" style="inset:10%;width:80%;height:80%"></div>
@@ -1717,34 +1717,28 @@
             });
         }
 
-        // ===== PROXY & API CALL =====
-        const PROXIES = [
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?',
-            'https://thingproxy.freeboard.io/fetch/'
-        ];
-
+        // ===== PROXY & API CALL (Self-proxy) =====
         async function callAPI(url, loadingId, resultId) {
             document.getElementById(loadingId).style.display = 'block';
             document.getElementById(resultId).innerHTML = '';
-            for (let i = 0; i < PROXIES.length; i++) {
-                try {
-                    const proxy = PROXIES[i];
-                    const fullUrl = proxy + encodeURIComponent(url);
-                    console.log('Trying proxy:', proxy);
-                    const res = await fetch(fullUrl, { signal: AbortSignal.timeout(10000) });
-                    if (!res.ok) continue;
-                    const text = await res.text();
-                    document.getElementById(loadingId).style.display = 'none';
-                    showResult(resultId, text, false);
+
+            try {
+                // Use your own Vercel serverless proxy
+                const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
+                const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(15000) });
+                document.getElementById(loadingId).style.display = 'none';
+
+                if (!res.ok) {
+                    const errText = await res.text();
+                    showResult(resultId, `HTTP ${res.status}\n${errText}`, true);
                     return;
-                } catch (err) {
-                    console.warn(`Proxy ${i} failed:`, err);
-                    continue;
                 }
+                const text = await res.text();
+                showResult(resultId, text, false);
+            } catch (err) {
+                document.getElementById(loadingId).style.display = 'none';
+                showResult(resultId, err.message, true);
             }
-            document.getElementById(loadingId).style.display = 'none';
-            showResult(resultId, 'All proxies failed. API might be down or blocking requests.', true);
         }
 
         // ===== API FUNCTIONS =====
@@ -1808,7 +1802,8 @@
             try {
                 const url =
                     `https://wormgpt.freeapihub.workers.dev/chat?q=${encodeURIComponent(q)}`;
-                const res = await fetch(PROXIES[0] + encodeURIComponent(url), { signal: AbortSignal.timeout(20000) });
+                const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
+                const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(20000) });
                 const text = await res.text();
                 let json = text;
                 try { json = JSON.stringify(cleanResponse(JSON.parse(text)), null, 2); } catch (e) {}
