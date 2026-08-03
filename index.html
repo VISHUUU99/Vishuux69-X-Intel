@@ -1549,21 +1549,6 @@
             const msgs = ['INJECTING PAYLOAD...', 'DECRYPTING KEYS...', 'BYPASSING FIREWALL...', 'ACCESS GRANTED'];
             let msgIdx = 0;
 
-            // Blood drops - random positions
-            const bloodContainer = document.getElementById('bloodDrops');
-            if (bloodContainer) {
-                for (let i = 0; i < 20; i++) {
-                    const b = document.createElement('div');
-                    b.className = 'e-blood';
-                    b.style.left = Math.random() * 100 + '%';
-                    const bh = 50 + Math.random() * 200;
-                    b.style.setProperty('--bh', bh + 'px');
-                    b.style.animationDuration = (2 + Math.random() * 3) + 's';
-                    b.style.animationDelay = (Math.random() * 4) + 's';
-                    bloodContainer.appendChild(b);
-                }
-            }
-
             const interval = setInterval(() => {
                 progress += Math.random() * 8 + 2;
                 if (progress > 100) progress = 100;
@@ -1601,7 +1586,11 @@
             for (let i = 0; i < 50; i++) {
                 const p = document.createElement('div');
                 p.className = 'db-ptcl';
+                p.style.position = 'absolute';
+                p.style.background = 'rgba(239,0,0,.05)';
+                p.style.borderRadius = '50%';
                 p.style.left = Math.random() * 100 + '%';
+                p.style.animation = 'float 20s linear infinite';
                 p.style.animationDuration = (15 + Math.random() * 30) + 's';
                 p.style.animationDelay = (Math.random() * 20) + 's';
                 p.style.width = (1 + Math.random() * 2) + 'px';
@@ -1671,9 +1660,28 @@
                 doAI(); }
         }
 
-        // ===== API CALLS =====
-        const PROXY = 'https://api.allorigins.win/raw?url=';
+        // ===== CLEAN RESPONSE =====
+        function cleanResponse(data) {
+            if (typeof data === 'string') {
+                try { data = JSON.parse(data); } catch (e) { return data; }
+            }
+            if (Array.isArray(data)) {
+                return data.map(item => cleanResponse(item));
+            }
+            if (data && typeof data === 'object') {
+                const blockedKeys = ['developer', 'channel', 'credits', 'developer_contact', 'join_channel', 'contact', 'credit', 'owner', 'telegram', 'github', 'website', 'dev', 'support'];
+                const newObj = {};
+                for (const [key, value] of Object.entries(data)) {
+                    if (!blockedKeys.includes(key.toLowerCase())) {
+                        newObj[key] = cleanResponse(value);
+                    }
+                }
+                return newObj;
+            }
+            return data;
+        }
 
+        // ===== SHOW RESULT =====
         function showResult(containerId, data, isError) {
             const container = document.getElementById(containerId);
             if (isError) {
@@ -1681,11 +1689,20 @@
                     `<div class="err-c"><i class="fa-solid fa-circle-exclamation"></i><p>${data}</p></div>`;
                 return;
             }
-            let json = data;
-            try { json = JSON.stringify(JSON.parse(data), null, 2); } catch (e) {}
+
+            let cleanedData = data;
+            try {
+                const parsed = JSON.parse(data);
+                const cleaned = cleanResponse(parsed);
+                cleanedData = JSON.stringify(cleaned, null, 2);
+            } catch (e) {
+                // If not JSON, just use raw (but we'll still try to remove common credit patterns if it's plain text)
+                cleanedData = data;
+            }
+
             container.innerHTML = `
                 <div class="jb"><div class="jb-h"><span>◈ RESULT</span><button class="jb-c" onclick="copyResult(this)">⎘ COPY</button></div>
-                <div class="jb-b">${json}</div></div>
+                <div class="jb-b">${cleanedData}</div></div>
             `;
         }
 
@@ -1700,21 +1717,37 @@
             });
         }
 
+        // ===== PROXY & API CALL =====
+        const PROXIES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?',
+            'https://thingproxy.freeboard.io/fetch/'
+        ];
+
         async function callAPI(url, loadingId, resultId) {
             document.getElementById(loadingId).style.display = 'block';
             document.getElementById(resultId).innerHTML = '';
-            try {
-                const res = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(15000) });
-                document.getElementById(loadingId).style.display = 'none';
-                if (!res.ok) { showResult(resultId, `HTTP ${res.status}`, true); return; }
-                const text = await res.text();
-                showResult(resultId, text, false);
-            } catch (err) {
-                document.getElementById(loadingId).style.display = 'none';
-                showResult(resultId, err.message, true);
+            for (let i = 0; i < PROXIES.length; i++) {
+                try {
+                    const proxy = PROXIES[i];
+                    const fullUrl = proxy + encodeURIComponent(url);
+                    console.log('Trying proxy:', proxy);
+                    const res = await fetch(fullUrl, { signal: AbortSignal.timeout(10000) });
+                    if (!res.ok) continue;
+                    const text = await res.text();
+                    document.getElementById(loadingId).style.display = 'none';
+                    showResult(resultId, text, false);
+                    return;
+                } catch (err) {
+                    console.warn(`Proxy ${i} failed:`, err);
+                    continue;
+                }
             }
+            document.getElementById(loadingId).style.display = 'none';
+            showResult(resultId, 'All proxies failed. API might be down or blocking requests.', true);
         }
 
+        // ===== API FUNCTIONS =====
         function doVehicleSearch() {
             const q = document.getElementById('v-input').value.trim();
             if (!q) return;
@@ -1775,10 +1808,10 @@
             try {
                 const url =
                     `https://wormgpt.freeapihub.workers.dev/chat?q=${encodeURIComponent(q)}`;
-                const res = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(20000) });
+                const res = await fetch(PROXIES[0] + encodeURIComponent(url), { signal: AbortSignal.timeout(20000) });
                 const text = await res.text();
                 let json = text;
-                try { json = JSON.stringify(JSON.parse(text), null, 2); } catch (e) {}
+                try { json = JSON.stringify(cleanResponse(JSON.parse(text)), null, 2); } catch (e) {}
                 botMsg.textContent = json.slice(0, 800);
             } catch (err) {
                 botMsg.textContent = '⚠️ ' + err.message;
