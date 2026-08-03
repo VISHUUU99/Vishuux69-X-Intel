@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>VISHUUX69 × INTEL X — All APIs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--neon-green:#00ff88;--neon-cyan:#00e5ff;--neon-red:#ff2055;--neon-gold:#ffd700;--dark-bg:#020c0a;--darker:#010805;--card-bg:rgba(0,255,136,0.04);--border-color:rgba(0,255,136,0.25);--text-primary:#e0ffe8;--text-muted:rgba(0,255,136,0.5)}
+        html{scroll-behavior:smooth}
+        body{background:var(--dark-bg);color:var(--text-primary);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
+        .parallax-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;background:radial-gradient(circle at 30% 40%, rgba(0,255,136,0.08) 0%, transparent 50%),radial-gradient(circle at 70% 60%, rgba(0,229,255,0.06) 0%, transparent 50%),linear-gradient(180deg, var(--dark-bg), var(--darker))}
+        #matrix-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.06;pointer-events:none}
+        .orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;animation:orbFloat 12s ease-in-out infinite}
+        .orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(0,255,136,0.2),transparent);top:-150px;left:-150px}
+        .orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(0,229,255,0.15),transparent);top:30%;right:-100px;animation-delay:4s}
+        .orb3{width:350px;height:350px;background:radial-gradient(circle,rgba(255,32,85,0.1),transparent);bottom:10%;left:25%;animation-delay:8s}
+        @keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}25%{transform:translateY(-40px) scale(1.1)}50%{transform:translateY(10px) scale(0.95)}75%{transform:translateY(-20px) scale(1.05)}}
+        .grid-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);background-size:60px 60px}
+        .app-wrap{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:0 20px}
+        header{padding:30px 0 20px;border-bottom:1px solid var(--border-color);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap}
+        .logo-section{display:flex;align-items:center;gap:16px}
+        .logo-hex{width:65px;height:65px;background:linear-gradient(135deg,var(--neon-green),var(--neon-cyan));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;animation:hexPulse 2s ease-in-out infinite,float 3s ease-in-out infinite;position:relative}
+        .logo-hex::after{content:'';position:absolute;inset:3px;background:var(--dark-bg);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
+        .logo-hex span{position:relative;z-index:1;font-size:20px;font-weight:900;color:var(--neon-green);font-family:'Orbitron',monospace}
+        @keyframes hexPulse{0%,100%{box-shadow:0 0 20px rgba(0,255,136,0.4)}50%{box-shadow:0 0 40px rgba(0,255,136,0.8),0 0 80px rgba(0,255,136,0.2)}}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+        .logo-text h1{font-family:'Orbitron',monospace;font-size:28px;font-weight:900;background:linear-gradient(90deg,var(--neon-green),var(--neon-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px}
+        .logo-text p{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:3px;margin-top:2px}
+        .header-status{text-align:right}
+        .status-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.3);padding:6px 14px;border-radius:20px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--neon-green)}
+        .status-dot{width:8px;height:8px;border-radius:50%;background:var(--neon-green);animation:blink 1.2s ease-in-out infinite;box-shadow:0 0 8px var(--neon-green)}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+        .tag-line{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:6px;letter-spacing:2px}
+        .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:30px 0 40px}
+        .stat-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:8px;padding:16px;text-align:center}
+        .stat-num{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;color:var(--neon-green)}
+        .stat-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-muted)}
+        .section-title{font-family:'Orbitron',monospace;font-size:13px;letter-spacing:4px;color:var(--text-muted);margin:32px 0 20px;display:flex;align-items:center;gap:12px}
+        .section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border-color),transparent)}
+        .module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:32px}
+        .module-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:8px;padding:18px 16px;cursor:pointer;transition:all 0.3s;text-align:center}
+        .module-card:hover{transform:translateY(-4px);border-color:var(--neon-green);box-shadow:0 8px 30px rgba(0,255,136,0.2)}
+        .module-icon{font-size:32px;display:block;margin-bottom:6px}
+        .module-title{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:1.5px;color:var(--neon-green);font-weight:700}
+        .module-desc{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-muted);margin-top:4px}
+        .cat-label{grid-column:1/-1;font-family:'Orbitron',monospace;font-size:9px;letter-spacing:3px;color:rgba(0,229,255,0.4);padding:6px 0;border-bottom:1px solid rgba(0,229,255,0.1);margin-bottom:4px}
+        .terminal-panel{background:rgba(0,0,0,0.7);border:1px solid var(--border-color);border-radius:12px;overflow:hidden;margin-bottom:32px;display:none;backdrop-filter:blur(10px)}
+        .terminal-panel.active{display:block;animation:slideDown 0.4s}
+        @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+        .terminal-header{background:rgba(0,255,136,0.08);border-bottom:1px solid var(--border-color);padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+        .terminal-dots{display:flex;gap:8px}.dot{width:12px;height:12px;border-radius:50%}
+        .dot-red{background:#ff5f57}.dot-yellow{background:#ffbd2e}.dot-green{background:#28ca41}
+        .terminal-title{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-muted)}
+        .terminal-close{background:none;border:1px solid rgba(255,32,85,0.4);color:var(--neon-red);padding:4px 12px;border-radius:4px;cursor:pointer;font-family:'Share Tech Mono';font-size:11px}
+        .terminal-body{padding:24px}
+        .input-row{display:flex;gap:12px;flex-wrap:wrap}
+        .terminal-input{flex:1;min-width:200px;background:rgba(0,255,136,0.05);border:1px solid var(--border-color);border-radius:6px;padding:12px 16px;color:var(--neon-green);font-family:'Share Tech Mono',monospace;font-size:14px;outline:none}
+        .terminal-input:focus{border-color:var(--neon-green);box-shadow:0 0 20px rgba(0,255,136,0.2)}
+        .execute-btn{background:linear-gradient(135deg,rgba(0,255,136,0.2),rgba(0,229,255,0.1));border:1px solid var(--neon-green);color:var(--neon-green);padding:12px 24px;border-radius:6px;cursor:pointer;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;transition:all 0.3s}
+        .execute-btn:hover{box-shadow:0 0 30px rgba(0,255,136,0.4);transform:translateY(-2px)}
+        .result-box{background:rgba(0,0,0,0.5);border:1px solid rgba(0,255,136,0.15);border-radius:8px;padding:20px;font-family:'Share Tech Mono',monospace;font-size:13px;color:#a0ffb0;display:none;max-height:400px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;margin-top:16px}
+        .result-box.active{display:block}
+        .msg-error{color:var(--neon-red)}
+        .glitch-text{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(0,255,136,0.3);margin-top:6px}
+        .glitch-text span{color:var(--neon-cyan)}
+        footer{border-top:1px solid var(--border-color);padding:20px 0;display:flex;justify-content:space-between;flex-wrap:wrap;margin-top:20px}
+        .footer-brand{font-family:'Orbitron',monospace;font-size:11px;color:var(--text-muted)}
+        .footer-brand span{color:var(--neon-green)}
+        .footer-tag{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,255,136,0.3)}
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:var(--dark-bg)}
+        ::-webkit-scrollbar-thumb{background:var(--neon-green);border-radius:3px}
+        @media(max-width:768px){.stats-bar{grid-template-columns:repeat(2,1fr)}.module-grid{grid-template-columns:repeat(2,1fr)}header{flex-direction:column;gap:16px;text-align:center}.header-status{text-align:center}}
+    </style>
+</head>
+<body>
+
+<div class="parallax-bg"></div>
+<canvas id="matrix-canvas"></canvas>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+<div class="grid-bg"></div>
+
+<div class="app-wrap">
+
+    <header>
+        <div class="logo-section">
+            <div class="logo-hex"><span>VX</span></div>
+            <div class="logo-text">
+                <h1>VISHUUX69 × INTEL X</h1>
+                <p>▸ ALL API MODULES v2.0</p>
+            </div>
+        </div>
+        <div class="header-status">
+            <div class="status-pill"><div class="status-dot"></div>MAINFRAME ONLINE</div>
+            <div class="tag-line">@vishuux69 • 9 MODULES</div>
+        </div>
+    </header>
+
+    <div class="stats-bar">
+        <div class="stat-card"><span class="stat-num" id="moduleCount">9</span><span class="stat-label">MODULES</span></div>
+        <div class="stat-card"><span class="stat-num">99.8%</span><span class="stat-label">UPTIME</span></div>
+        <div class="stat-card"><span class="stat-num" id="queryCount">0</span><span class="stat-label">QUERIES</span></div>
+        <div class="stat-card"><span class="stat-num">v2.0</span><span class="stat-label">BUILD</span></div>
+    </div>
+
+    <div class="section-title">◈ SELECT INTELLIGENCE MODULE</div>
+
+    <div class="module-grid" id="moduleGrid">
+        <div class="cat-label">▸ 📞 OSINT &amp; IDENTITY</div>
+        <div class="module-card" onclick="openTerminal('mobile','🔍 MOBILE SEARCH','Enter 10-digit mobile','9999999991')">
+            <span class="module-icon">📱</span><div class="module-title">MOBILE SEARCH</div><div class="module-desc">Operator, circle, location</div>
+        </div>
+        <div class="module-card" onclick="openTerminal('aadhar','🆔 AADHAAR INFO','Enter 12-digit Aadhaar','263775798031')">
+            <span class="module-icon">🆔</span><div class="module-title">AADHAAR INFO</div><div class="module-desc">Basic verification</div>
+        </div>
+        <div class="module-card" onclick="openTerminal('aadhar_family','👨‍👩‍👧 AADHAAR FAMILY','Enter 12-digit Aadhaar','263775798031')">
+            <span class="module-icon">🧬</span><div class="module-title">AADHAAR FAMILY</div><div class="module-desc">Family members linked</div>
+        </div>
+        <div class="module-card" onclick="openTerminal('email','📧 EMAIL OSINT','Enter email address','rhythmmakhija16@gmail.com')">
+            <span class="module-icon">📧</span><div class="module-title">EMAIL OSINT</div><div class="module-desc">Breach, MX, reputation</div>
+        </div>
+        <div class="module-card" onclick="openTerminal('paytm','💳 PAYTM LEAK','Enter mobile / email','9876543210')">
+            <span class="module-icon">💳</span><div class="module-title">PAYTM LEAK</div><div class="module-desc">KYC &amp; transaction data</div>
+        </div>
+
+        <div class="cat-label">▸ 🚗 VEHICLE INTELLIGENCE</div>
+        <div class="module-card" onclick="openTerminal('rc_adv','🚗 RC ADVANCED','Enter Vehicle Number','RJ18CF3690')">
+            <span class="module-icon">🚗</span><div class="module-title">RC ADVANCED</div><div class="module-desc">Full RC + insurance</div>
+        </div>
+        <div class="module-card" onclick="openTerminal('rc_v2','🚗 RC V2','Enter Vehicle Number','RJ18CF3690')">
+            <span class="module-icon">🚗</span><div class="module-title">RC V2</div><div class="module-desc">Alternate RC lookup</div>
+        </div>
+
+        <div class="cat-label">▸ 🌐 SOCIAL &amp; NETWORK</div>
+        <div class="module-card" onclick="openTerminal('github','🐙 GITHUB INFO','Enter username','octocat')">
+            <span class="module-icon">🐙</span><div class="module-title">GITHUB INFO</div><div class="module-desc">Profile, repos, activity</div>
+        </div>
+        <div class="module-card" onclick="openTerminal('ip','🌐 IP GEOLOCATION','Enter IP address','8.8.8.8')">
+            <span class="module-icon">🌐</span><div class="module-title">IP GEOLOCATION</div><div class="module-desc">Location, ISP, ASN</div>
+        </div>
+    </div>
+
+    <div class="terminal-panel" id="terminalPanel">
+        <div class="terminal-header">
+            <div class="terminal-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+            <div class="terminal-title" id="termTitle">── VISHUUX69 × INTEL X TERMINAL ──</div>
+            <button class="terminal-close" onclick="closeTerminal()">✕ CLOSE</button>
+        </div>
+        <div class="terminal-body">
+            <div id="loadingBar" style="height:3px;background:linear-gradient(90deg,var(--neon-green),var(--neon-cyan));background-size:200% 100%;animation:loadingAnim 1.5s linear infinite;display:none;margin-bottom:16px;border-radius:2px;"></div>
+            <div style="margin-bottom:16px;">
+                <label style="font-family:'Share Tech Mono';font-size:11px;color:var(--text-muted);" id="inputLabel">◈ TARGET PARAMETER</label>
+                <div class="input-row" style="margin-top:8px;">
+                    <input type="text" class="terminal-input" id="queryInput" placeholder="Enter query..." />
+                    <button class="execute-btn" onclick="executeQuery()">⚡ EXECUTE</button>
+                </div>
+                <div class="glitch-text">Example: <span id="exampleVal">RJ18CF3690</span></div>
+            </div>
+            <div class="result-box" id="resultBox">
+                <div style="display:flex;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+                    <span style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);padding:4px 10px;border-radius:4px;">◈ INTELLIGENCE RESULT</span>
+                    <button onclick="copyResult()" style="background:none;border:1px solid rgba(0,229,255,0.3);color:var(--neon-cyan);padding:4px 12px;border-radius:4px;cursor:pointer;font-family:'Share Tech Mono';">⎘ COPY</button>
+                </div>
+                <div id="resultContent"></div>
+                <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(0,255,136,0.1);font-size:10px;color:rgba(0,255,136,0.3);">◈ VISHUUX69 × INTEL X • @vishuux69 • SECURE</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-brand"><span>VISHUUX69 × INTEL X</span> © 2025</div>
+        <div class="footer-tag">@vishuux69 • ALL 9 APIS INTEGRATED</div>
+    </footer>
+
+</div>
+
+<script>
+// ===== MATRIX RAIN =====
+const canvas = document.getElementById('matrix-canvas'), ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; drops = Array(Math.floor(canvas.width / 16)).fill(1); });
+const chars = 'VISHUUX69XINTEL0123456789ABCDEF';
+let drops = Array(Math.floor(canvas.width / 16)).fill(1);
+function drawMatrix() {
+    ctx.fillStyle = 'rgba(2,12,10,0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = '14px Share Tech Mono';
+    drops.forEach((y, i) => {
+        const c = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillStyle = Math.random() > 0.95 ? '#00e5ff' : '#00ff88';
+        ctx.fillText(c, i * 16, y * 16);
+        if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+    });
+}
+setInterval(drawMatrix, 50);
+
+// ===== API CONFIG — SARE 9 ENDPOINTS =====
+const API_CONFIG = {
+    mobile: { url: q => `https://hitech-info-noobster.com-dashbord63hh7qe4.workers.dev/search?mobile=${q}` },
+    aadhar: { url: q => `https://hitech-info-noobster.com-dashbord63hh7qe4.workers.dev/aadhar?aadhar=${q}` },
+    aadhar_family: { url: q => `https://adhaar2family-1year.noob73613.workers.dev/?key=NOOBSTER&aadhaar=${q}` },
+    email: { url: q => `https://hitech-info-noobster.com-dashbord63hh7qe4.workers.dev/email?email=${q}` },
+    paytm: { url: q => `https://paytm-leakinfo-noobster.com-dashbord63hh7qe4.workers.dev/?key=@noob11001&info=${q}` },
+    rc_adv: { url: q => `https://vehicleto-adavanceinfo-noobster.com-dashbord63hh7qe4.workers.dev/?rc=${q}` },
+    rc_v2: { url: q => `https://vehicle2info-noobster.com-dashbord63hh7qe4.workers.dev/?key=@noob11001&rc=${q}` },
+    github: { url: q => `https://github2info-noobster.com-dashbord63hh7qe4.workers.dev/?username=${q}` },
+    ip: { url: q => `https://ipwho.is/${q}` }
+};
+
+// ===== STATE =====
+let currentApi = '';
+let queryCount = parseInt(localStorage.getItem('vishuux69_intel_queries') || '0');
+document.getElementById('queryCount').textContent = queryCount;
+document.getElementById('moduleCount').textContent = Object.keys(API_CONFIG).length;
+
+// ===== TERMINAL CONTROLS =====
+function openTerminal(api, title, label, example) {
+    currentApi = api;
+    document.getElementById('termTitle').textContent = `── ${title} ──`;
+    document.getElementById('inputLabel').textContent = `◈ ${label}`;
+    document.getElementById('exampleVal').textContent = example;
+    document.getElementById('queryInput').value = '';
+    document.getElementById('queryInput').placeholder = example;
+    document.getElementById('resultBox').className = 'result-box';
+    document.getElementById('resultContent').textContent = '';
+    document.getElementById('loadingBar').style.display = 'none';
+    const panel = document.getElementById('terminalPanel');
+    panel.className = 'terminal-panel active';
+    panel.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => document.getElementById('queryInput').focus(), 400);
+}
+
+function closeTerminal() {
+    document.getElementById('terminalPanel').className = 'terminal-panel';
+}
+
+// ===== EXECUTE =====
+async function executeQuery() {
+    const query = document.getElementById('queryInput').value.trim();
+    if (!query) return showResult('⚠️ Please enter a valid target', true);
+
+    const config = API_CONFIG[currentApi];
+    if (!config) return showResult('⚠️ Module not configured', true);
+
+    const url = config.url(query);
+    document.getElementById('loadingBar').style.display = 'block';
+    document.getElementById('resultBox').className = 'result-box';
+
+    try {
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+        const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(15000) });
+        document.getElementById('loadingBar').style.display = 'none';
+
+        if (!res.ok) {
+            showResult(`⚠️ HTTP ${res.status} — ${res.statusText}`, true);
+            return;
+        }
+
+        let text = await res.text();
+        try { text = JSON.stringify(JSON.parse(text), null, 2); } catch (_) {}
+        queryCount++;
+        localStorage.setItem('vishuux69_intel_queries', queryCount);
+        document.getElementById('queryCount').textContent = queryCount;
+        showResult(text, false);
+    } catch (err) {
+        document.getElementById('loadingBar').style.display = 'none';
+        showResult(`⚠️ ${err.message}`, true);
+    }
+}
+
+function showResult(text, isError) {
+    const box = document.getElementById('resultBox');
+    const content = document.getElementById('resultContent');
+    box.className = isError ? 'result-box active msg-error' : 'result-box active';
+    content.textContent = text;
+}
+
+function copyResult() {
+    const text = document.getElementById('resultContent').textContent;
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('[onclick="copyResult()"]');
+        const orig = btn.textContent;
+        btn.textContent = '✓ COPIED';
+        setTimeout(() => btn.textContent = orig, 1500);
+    });
+}
+
+document.getElementById('queryInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') executeQuery();
+});
+</script>
+
+</body>
+</html>
