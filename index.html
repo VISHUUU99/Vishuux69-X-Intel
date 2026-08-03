@@ -81,7 +81,7 @@
                     <div class="mc" onclick="goPage('aadhar_family')"><div class="mc-ic"><i class="fa-solid fa-people-group"></i></div><div class="mc-t">AADHAAR FAMILY</div><div class="mc-d">Linked family members</div></div>
                     <div class="mc" onclick="goPage('email')"><div class="mc-ic"><i class="fa-solid fa-envelope"></i></div><div class="mc-t">EMAIL RECON</div><div class="mc-d">Breach, MX, reputation</div></div>
                     <div class="mc" onclick="goPage('paytm')"><div class="mc-ic"><i class="fa-solid fa-credit-card"></i></div><div class="mc-t">PAYTM LEAK</div><div class="mc-d">KYC &amp; transaction</div></div>
-                    <div class="mc" onclick="goPage('allleak')"><div class="mc-ic"><i class="fa-solid fa-database"></i></div><div class="mc-t">ALL LEAK INFO</div><div class="mc-d">Comprehensive leak data</div></div>
+                    <div class="mc" onclick="goPage('allleak')"><div class="mc-ic"><i class="fa-solid fa-database"></i></div><div class="mc-t">ALL LEAK INFO</div><div class="mc-d">Email, Number, Aadhaar</div></div>
                     <div class="mc" onclick="goPage('rc_adv')"><div class="mc-ic"><i class="fa-solid fa-car"></i></div><div class="mc-t">RC ADVANCED</div><div class="mc-d">Full RC + insurance</div></div>
                     <div class="mc" onclick="goPage('rc_v2')"><div class="mc-ic"><i class="fa-solid fa-car-side"></i></div><div class="mc-t">RC V2</div><div class="mc-d">Alternate RC lookup</div></div>
                     <div class="mc" onclick="goPage('github')"><div class="mc-ic"><i class="fa-brands fa-github"></i></div><div class="mc-t">GITHUB INFO</div><div class="mc-d">Profile, repos, activity</div></div>
@@ -143,8 +143,8 @@
             <div class="pg" id="pg-allleak">
                 <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
                 <div style="max-width:840px;margin:0 auto">
-                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-database"></i></div><div><div class="sh-t">ALL LEAK INFO</div><div class="sh-d">Comprehensive leak data</div></div></div>
-                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="allleak-input" placeholder="Mobile number... e.g. 9998887779"><button class="sb" onclick="doAllLeakSearch()">Scan</button></div>
+                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-database"></i></div><div><div class="sh-t">ALL LEAK INFO</div><div class="sh-d">Email, Number, Aadhaar</div></div></div>
+                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="allleak-input" placeholder="Email / Number / Aadhaar..."><button class="sb" onclick="doAllLeakSearch()">Scan</button></div>
                     <div id="allleak-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING...</span></div></div></div></div>
                     <div id="allleak-result" style="margin-top:14px"></div>
                 </div>
@@ -314,7 +314,6 @@
             }
             if (Array.isArray(data)) return data.map(item => cleanResponse(item));
             if (data && typeof data === 'object') {
-                // List of banned substrings (case-insensitive)
                 const bannedSubstrings = [
                     'developer', 'dev', 'dm', 'buy', 'channel', 'credit', 'contact',
                     'telegram', 'github', 'website', 'support', 'join', 'owner',
@@ -323,7 +322,6 @@
                 const newObj = {};
                 for (const [key, value] of Object.entries(data)) {
                     const lowerKey = key.toLowerCase();
-                    // Check if any banned substring appears in the key
                     const shouldBlock = bannedSubstrings.some(banned => lowerKey.includes(banned));
                     if (!shouldBlock) {
                         newObj[key] = cleanResponse(value);
@@ -410,7 +408,7 @@
         function doAllLeakSearch() {
             const q = document.getElementById('allleak-input').value.trim();
             if (!q) return;
-            callAPI(`https://allnew.proportalxc.workers.dev/num?number=${q}`, 'allleak-loading', 'allleak-result');
+            callAPI(`https://rootx-osint.in/?type=leakosint&key=demo_rootxindia&query=${q}`, 'allleak-loading', 'allleak-result');
         }
         function doRCAdvSearch() {
             const q = document.getElementById('rcadv-input').value.trim();
