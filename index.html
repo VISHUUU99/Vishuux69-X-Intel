@@ -8,1439 +8,74 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
-        :root {
-            --bg: #050508;
-            --card: rgba(12, 12, 18, .92);
-            --border: rgba(239, 68, 68, .06);
-            --red: #e00;
-            --neon: #00f0ff;
-            --purple: #a855f7;
-            --yellow: #fbbf24;
-            --green: #22c55e;
-            --pink: #ec4899;
-            --text: #b0b8c8;
-            --text2: #6a7588;
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        ::-webkit-scrollbar {
-            width: 3px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--red);
-            border-radius: 2px;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            min-height: 100vh;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        /* ===== ANTI INSPECT ===== */
-        #anti-inspect {
-            position: fixed;
-            inset: 0;
-            z-index: 99999999;
-            background: #000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 14px;
-        }
-        #anti-inspect.show {
-            display: flex;
-        }
-        .ai-i {
-            font-size: 90px;
-            color: var(--red);
-            text-shadow: 0 0 70px var(--red), 0 0 140px rgba(239, 0, 0, .4);
-            animation: aip .4s ease-in-out infinite;
-        }
-        @keyframes aip {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.25);
-            }
-        }
-        .ai-t {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 22px;
-            color: var(--red);
-            letter-spacing: 8px;
-            text-shadow: 0 0 30px rgba(239, 0, 0, .6);
-            animation: aif .12s infinite;
-        }
-        @keyframes aif {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: .2;
-            }
-        }
-        .ai-s {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 9px;
-            color: rgba(239, 0, 0, .35);
-            letter-spacing: 3px;
-        }
-
-        /* ===== ENTRY ===== */
-        #entry {
-            position: fixed;
-            inset: 0;
-            z-index: 999998;
-            background: #000;
-            overflow: hidden;
-            transition: opacity 1.2s, filter 1.2s;
-        }
-        #entry.done {
-            opacity: 0;
-            filter: brightness(8) blur(10px);
-            pointer-events: none;
-        }
-        #entry-canvas {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-        }
-        .e-ds {
-            position: absolute;
-            top: 0;
-            width: 40%;
-            height: 200%;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 8px;
-            line-height: 1.3;
-            color: rgba(239, 0, 0, .04);
-            word-break: break-all;
-            overflow: hidden;
-            animation: dsScroll 30s linear infinite;
-            z-index: 2;
-            pointer-events: none;
-        }
-        .e-ds.l {
-            left: 0;
-            text-align: left;
-        }
-        .e-ds.r {
-            right: 0;
-            text-align: right;
-        }
-        @keyframes dsScroll {
-            0% {
-                transform: translateY(0);
-            }
-            100% {
-                transform: translateY(-50%);
-            }
-        }
-        .e-cross {
-            position: absolute;
-            z-index: 3;
-            pointer-events: none;
-        }
-        .e-cross::before,
-        .e-cross::after {
-            content: '';
-            position: absolute;
-            background: rgba(239, 0, 0, .04);
-        }
-        .e-cross::before {
-            width: 1px;
-            height: 100%;
-            left: 50%;
-        }
-        .e-cross::after {
-            height: 1px;
-            width: 100%;
-            top: 50%;
-        }
-        .e-center {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .e-skull {
-            width: clamp(100px, 18vw, 180px);
-            height: auto;
-            filter: drop-shadow(0 0 40px rgba(239, 0, 0, .5));
-            animation: eFloat 3s ease-in-out infinite;
-        }
-        @keyframes eFloat {
-            0%,
-            100% {
-                transform: translateY(0) scale(1);
-            }
-            50% {
-                transform: translateY(-12px) scale(1.03);
-            }
-        }
-        .e-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(24px, 4.5vw, 50px);
-            font-weight: 900;
-            color: var(--red);
-            letter-spacing: 6px;
-            text-shadow: 0 0 40px rgba(239, 0, 0, .6);
-            animation: eGlitch 3s infinite;
-        }
-        @keyframes eGlitch {
-            0%,
-            92%,
-            100% {
-                text-shadow: 0 0 40px rgba(239, 0, 0, .6);
-                transform: translateX(0);
-            }
-            93% {
-                text-shadow: 4px 0 #fff, -4px 0 var(--red);
-                transform: translateX(4px);
-            }
-            95% {
-                text-shadow: -3px 0 var(--red), 3px 0 #fff;
-                transform: translateX(-3px);
-            }
-            97% {
-                text-shadow: 0 0 40px rgba(239, 0, 0, .6);
-                transform: translateX(1px);
-            }
-        }
-        .e-sub {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: clamp(8px, 1.2vw, 12px);
-            color: rgba(239, 0, 0, .4);
-            letter-spacing: 5px;
-        }
-        .e-bar {
-            position: absolute;
-            bottom: 8%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: min(350px, 75vw);
-            z-index: 12;
-        }
-        .e-bar-track {
-            height: 2px;
-            background: rgba(239, 0, 0, .08);
-            border-radius: 1px;
-            overflow: hidden;
-        }
-        .e-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--red), rgba(255, 255, 255, .6), var(--red));
-            box-shadow: 0 0 8px var(--red);
-            animation: barPulse 1s infinite;
-        }
-        @keyframes barPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 8px var(--red);
-            }
-            50% {
-                box-shadow: 0 0 16px var(--red);
-            }
-        }
-        .e-bar-text {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 9px;
-            color: rgba(239, 0, 0, .35);
-            margin-top: 6px;
-            text-align: center;
-            letter-spacing: 2px;
-        }
-        .e-flash {
-            position: absolute;
-            inset: 0;
-            z-index: 20;
-            opacity: 0;
-            pointer-events: none;
-        }
-        .e-flash.r {
-            background: rgba(200, 0, 0, .5);
-        }
-        .e-flash.w {
-            background: rgba(255, 255, 255, .7);
-        }
-        .e-tear {
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 3px;
-            z-index: 18;
-            pointer-events: none;
-            opacity: 0;
-            background: rgba(239, 0, 0, .4);
-        }
-        .e-tear.go {
-            animation: tearA .1s steps(2) 3;
-        }
-        @keyframes tearA {
-            0% {
-                opacity: 0;
-                transform: translateY(0) skewY(0);
-            }
-            25% {
-                opacity: 1;
-                transform: translateY(-4px) skewY(3deg);
-            }
-            75% {
-                opacity: .8;
-                transform: translateY(2px) skewY(-2deg);
-            }
-            100% {
-                opacity: 0;
-            }
-        }
-        .e-static {
-            position: absolute;
-            inset: 0;
-            z-index: 15;
-            pointer-events: none;
-            opacity: 0;
-            mix-blend-mode: overlay;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-            background-size: 256px;
-        }
-        .e-static.go {
-            animation: staticA .08s steps(3) 5;
-        }
-        @keyframes staticA {
-            0% {
-                opacity: 0;
-            }
-            50% {
-                opacity: .3;
-            }
-            100% {
-                opacity: 0;
-            }
-        }
-        .e-blood {
-            position: absolute;
-            top: 0;
-            width: 3px;
-            border-radius: 0 0 2px 2px;
-            background: linear-gradient(to bottom, rgba(180, 0, 0, .7), transparent);
-            z-index: 4;
-            animation: bloodD linear infinite;
-        }
-        @keyframes bloodD {
-            0% {
-                height: 0;
-                opacity: .7;
-                transform: translateY(0);
-            }
-            100% {
-                height: var(--bh);
-                opacity: 0;
-                transform: translateY(var(--bh));
-            }
-        }
-
-        /* ===== DASH REVEAL ===== */
-        #dash-reveal {
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: var(--bg);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            perspective: 1200px;
-        }
-        #dash-reveal.done {
-            animation: drOut 1.4s cubic-bezier(.16, 1, .3, 1) forwards;
-        }
-        @keyframes drOut {
-            0% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: .4;
-                transform: scale(1.06) rotateX(4deg);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(1.15) rotateX(-8deg);
-                pointer-events: none;
-            }
-        }
-        .dr-cube {
-            width: 90px;
-            height: 90px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: drSpin 2s ease-in-out infinite;
-        }
-        @keyframes drSpin {
-            0% {
-                transform: rotateX(0) rotateY(0);
-            }
-            25% {
-                transform: rotateX(90deg) rotateY(90deg);
-            }
-            50% {
-                transform: rotateX(180deg) rotateY(180deg);
-            }
-            75% {
-                transform: rotateX(270deg) rotateY(270deg);
-            }
-            100% {
-                transform: rotateX(360deg) rotateY(360deg);
-            }
-        }
-        .dr-f {
-            position: absolute;
-            width: 90px;
-            height: 90px;
-            border: 1px solid rgba(239, 0, 0, .2);
-            background: rgba(239, 0, 0, .02);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 9px;
-            color: var(--red);
-            letter-spacing: 2px;
-        }
-        .dr-f:nth-child(1) {
-            transform: translateZ(45px);
-        }
-        .dr-f:nth-child(2) {
-            transform: rotateY(180deg) translateZ(45px);
-        }
-        .dr-f:nth-child(3) {
-            transform: rotateY(90deg) translateZ(45px);
-        }
-        .dr-f:nth-child(4) {
-            transform: rotateY(-90deg) translateZ(45px);
-        }
-        .dr-f:nth-child(5) {
-            transform: rotateX(90deg) translateZ(45px);
-        }
-        .dr-f:nth-child(6) {
-            transform: rotateX(-90deg) translateZ(45px);
-        }
-        .dr-ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(239, 0, 0, .08);
-            animation: drRing 2.5s ease-in-out infinite;
-        }
-        .dr-ring:nth-child(1) {
-            width: 200px;
-            height: 200px;
-            left: -55px;
-            top: -55px;
-        }
-        .dr-ring:nth-child(2) {
-            width: 300px;
-            height: 300px;
-            left: -105px;
-            top: -105px;
-            animation-delay: .5s;
-        }
-        .dr-ring:nth-child(3) {
-            width: 400px;
-            height: 400px;
-            left: -155px;
-            top: -155px;
-            animation-delay: 1s;
-        }
-        @keyframes drRing {
-            0%,
-            100% {
-                transform: scale(.9);
-                opacity: .04;
-            }
-            50% {
-                transform: scale(1.1);
-                opacity: .15;
-            }
-        }
-        .dr-text {
-            position: absolute;
-            bottom: 70px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 9px;
-            letter-spacing: 4px;
-            color: rgba(239, 0, 0, .35);
-            animation: drTP 1s infinite;
-        }
-        @keyframes drTP {
-            0%,
-            100% {
-                opacity: .15;
-            }
-            50% {
-                opacity: .6;
-            }
-        }
-
-        /* ===== APP ===== */
-        #app {
-            display: none;
-            opacity: 0;
-            transform: scale(.96);
-            transition: all .8s cubic-bezier(.16, 1, .3, 1);
-        }
-        #app.show {
-            display: block;
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* DASHBOARD BG */
-        .db-bg {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .db-grid {
-            position: absolute;
-            inset: -60px;
-            background-image: linear-gradient(rgba(239, 0, 0, .02) 1px, transparent 1px), linear-gradient(90deg, rgba(239, 0, 0, .02) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: gridM 50s linear infinite;
-            transform: rotateX(60deg) translateZ(-300px);
-            transform-origin: center bottom;
-        }
-        @keyframes gridM {
-            to {
-                background-position: 60px 60px;
-            }
-        }
-        .db-glow {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            pointer-events: none;
-        }
-        .db-g1 {
-            width: 450px;
-            height: 450px;
-            background: rgba(239, 0, 0, .04);
-            top: -8%;
-            right: -5%;
-            animation: glowD 18s ease-in-out infinite alternate;
-        }
-        .db-g2 {
-            width: 350px;
-            height: 350px;
-            background: rgba(100, 0, 0, .03);
-            bottom: -5%;
-            left: -5%;
-            animation: glowD 14s ease-in-out infinite alternate-reverse;
-        }
-        @keyframes glowD {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                transform: translate(30px, -25px) scale(1.15);
-            }
-        }
-        .db-scan {
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, .03) 2px, rgba(0, 0, 0, .03) 4px);
-            pointer-events: none;
-        }
-        .db-vig {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at center, transparent 25%, rgba(0, 0, 0, .65) 100%);
-            pointer-events: none;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 225px;
-            z-index: 50;
-            display: flex;
-            flex-direction: column;
-            background: rgba(6, 6, 10, .97);
-            backdrop-filter: blur(30px);
-            border-right: 1px solid var(--border);
-            transition: transform .3s;
-        }
-        @media(max-width:1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
-        .sb-head {
-            padding: 16px 14px 12px;
-            border-bottom: 1px solid var(--border);
-        }
-        .sb-brand {
-            display: flex;
-            align-items: baseline;
-            gap: 6px;
-        }
-        .sb-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 15px;
-            font-weight: 900;
-            color: var(--red);
-            letter-spacing: 4px;
-            text-shadow: 0 0 12px rgba(239, 0, 0, .25);
-        }
-        .sb-x {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 8px;
-            font-weight: 700;
-            color: var(--red);
-            opacity: .65;
-        }
-        .sb-tag {
-            font-size: 5px;
-            letter-spacing: 3px;
-            color: rgba(239, 0, 0, .1);
-            margin-top: 2px;
-        }
-        .sb-enc {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 3px 8px;
-            border-radius: 4px;
-            background: rgba(239, 0, 0, .04);
-            border: 1px solid rgba(239, 0, 0, .1);
-            font-size: 7px;
-            color: var(--red);
-            letter-spacing: 1px;
-            font-family: 'Share Tech Mono', monospace;
-            margin-top: 6px;
-        }
-        .sb-dot {
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: var(--red);
-            box-shadow: 0 0 5px var(--red);
-            animation: sbDot 1.5s infinite;
-        }
-        @keyframes sbDot {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: .15;
-            }
-        }
-        .sb-nav {
-            flex: 1;
-            padding: 6px 0;
-            overflow-y: auto;
-        }
-        .nav-i {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 9px 14px;
-            margin: 2px 5px;
-            border-radius: 7px;
-            font-size: 12.5px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, .12);
-            cursor: pointer;
-            transition: all .25s;
-            border: 1px solid transparent;
-        }
-        .nav-i:hover {
-            color: rgba(255, 255, 255, .35);
-            background: rgba(239, 0, 0, .02);
-        }
-        .nav-i.act {
-            color: var(--red);
-            background: rgba(239, 0, 0, .05);
-            border-color: rgba(239, 0, 0, .12);
-            box-shadow: 0 0 16px rgba(239, 0, 0, .04);
-        }
-        .nav-i i {
-            width: 15px;
-            text-align: center;
-            font-size: 10px;
-        }
-        .sb-foot {
-            padding: 8px 12px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .sb-pulse {
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: var(--red);
-            position: relative;
-            box-shadow: 0 0 5px var(--red);
-        }
-        .sb-pulse::after {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            border: 1px solid var(--red);
-            animation: sbPR 2s ease-out infinite;
-        }
-        @keyframes sbPR {
-            0% {
-                transform: scale(1);
-                opacity: .5;
-            }
-            100% {
-                transform: scale(3);
-                opacity: 0;
-            }
-        }
-        .sb-foot-t {
-            font-size: 6px;
-            color: rgba(239, 0, 0, .15);
-            letter-spacing: 1px;
-        }
-
-        /* Main */
-        .main {
-            margin-left: 225px;
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-            padding: 14px 20px 80px;
-        }
-        @media(max-width:1024px) {
-            .main {
-                margin-left: 0;
-            }
-        }
-        .mob-t {
-            display: none;
-            position: fixed;
-            top: 12px;
-            left: 12px;
-            z-index: 60;
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            background: rgba(6, 6, 10, .95);
-            border: 1px solid var(--border);
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--red);
-            font-size: 12px;
-        }
-        @media(max-width:1024px) {
-            .mob-t {
-                display: flex;
-            }
-        }
-        .hdr {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 6px 0 12px;
-        }
-        .hdr-r {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
-            font-weight: 800;
-            color: var(--red);
-            letter-spacing: 5px;
-            text-shadow: 0 0 12px rgba(239, 0, 0, .2);
-        }
-        .hdr-d {
-            width: 1px;
-            height: 12px;
-            background: rgba(239, 0, 0, .1);
-        }
-        .hdr-x {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 9px;
-            font-weight: 700;
-            color: var(--red);
-            opacity: .6;
-        }
-
-        /* Pages */
-        .pg {
-            display: none;
-            animation: pgIn .35s ease;
-        }
-        .pg.act {
-            display: block;
-        }
-        @keyframes pgIn {
-            from {
-                opacity: 0;
-                transform: translateY(6px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Search */
-        .sx {
-            position: relative;
-            max-width: 480px;
-            margin: 0 auto 28px;
-        }
-        .sx input {
-            width: 100%;
-            padding: 12px 15px 12px 42px;
-            background: rgba(239, 0, 0, .02);
-            border: 1px solid rgba(239, 0, 0, .07);
-            border-radius: 10px;
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 13.5px;
-            font-weight: 500;
-            outline: none;
-            transition: all .3s;
-        }
-        .sx input:focus {
-            border-color: rgba(239, 0, 0, .2);
-            box-shadow: 0 0 25px rgba(239, 0, 0, .04);
-        }
-        .sx input::placeholder {
-            color: rgba(255, 255, 255, .1);
-        }
-        .sx .si {
-            position: absolute;
-            left: 13px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(239, 0, 0, .18);
-            font-size: 11px;
-        }
-        .sx .sb {
-            position: absolute;
-            right: 3px;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 7px 16px;
-            border-radius: 7px;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            border: 1px solid rgba(239, 0, 0, .12);
-            background: rgba(239, 0, 0, .05);
-            color: var(--red);
-            cursor: pointer;
-            transition: all .25s;
-        }
-        .sx .sb:hover {
-            background: rgba(239, 0, 0, .1);
-            box-shadow: 0 0 18px rgba(239, 0, 0, .06);
-        }
-
-        /* Module grid */
-        .mg {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
-            gap: 10px;
-            max-width: 820px;
-            margin: 0 auto;
-        }
-        .mc {
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 16px;
-            cursor: pointer;
-            transition: all .3s;
-        }
-        .mc:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 28px rgba(0, 0, 0, .4);
-            border-color: rgba(239, 0, 0, .12);
-        }
-        .mc::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(239, 0, 0, .15), transparent);
-        }
-        .mc-ic {
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            background: rgba(239, 0, 0, .04);
-            border: 1px solid rgba(239, 0, 0, .08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            transition: all .3s;
-        }
-        .mc:hover .mc-ic {
-            background: rgba(239, 0, 0, .08);
-            box-shadow: 0 0 12px rgba(239, 0, 0, .08);
-        }
-        .mc-ic i {
-            color: var(--red);
-            font-size: 13px;
-        }
-        .mc-t {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 8.5px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            color: #fff;
-            margin-bottom: 3px;
-        }
-        .mc-d {
-            font-size: 10.5px;
-            color: var(--text2);
-            line-height: 1.3;
-        }
-
-        /* Section header */
-        .sh {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-        .sh-ic {
-            width: 38px;
-            height: 38px;
-            border-radius: 9px;
-            background: rgba(239, 0, 0, .04);
-            border: 1px solid rgba(239, 0, 0, .08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .sh-ic i {
-            color: var(--red);
-            font-size: 14px;
-        }
-        .sh-t {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 2.5px;
-            color: #fff;
-        }
-        .sh-d {
-            font-size: 9.5px;
-            color: var(--text2);
-        }
-
-        /* Section card */
-        .sc {
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            margin-bottom: 12px;
-            backdrop-filter: blur(12px);
-        }
-        .sc::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(239, 0, 0, .1), transparent);
-        }
-        .sc-h {
-            padding: 12px 16px;
-            border-bottom: 1px solid rgba(239, 0, 0, .03);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .sc-h-ic {
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .sc-h-t {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 9px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: #fff;
-            flex: 1;
-        }
-        .sc-b {
-            padding: 12px 16px;
-        }
-
-        /* Data row */
-        .dr {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 7px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, .015);
-            gap: 8px;
-        }
-        .dr:last-child {
-            border-bottom: none;
-        }
-        .dk {
-            font-size: 10px;
-            color: var(--text2);
-            text-transform: uppercase;
-            letter-spacing: .8px;
-            font-weight: 600;
-            min-width: 145px;
-            flex-shrink: 0;
-        }
-        .dv {
-            font-size: 12.5px;
-            color: #c0c8d8;
-            font-weight: 500;
-            text-align: right;
-            word-break: break-all;
-            line-height: 1.5;
-        }
-        .dv.dg {
-            color: var(--red);
-        }
-        .dv.ds {
-            color: var(--green);
-        }
-        .dv.dw {
-            color: var(--yellow);
-        }
-
-        /* Badge */
-        .bd {
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 9px;
-            font-weight: 700;
-        }
-        .bd-r {
-            background: rgba(239, 0, 0, .06);
-            border: 1px solid rgba(239, 0, 0, .15);
-            color: var(--red);
-        }
-        .bd-g {
-            background: rgba(34, 197, 94, .06);
-            border: 1px solid rgba(34, 197, 94, .15);
-            color: var(--green);
-        }
-        .bd-y {
-            background: rgba(251, 191, 36, .06);
-            border: 1px solid rgba(251, 191, 36, .15);
-            color: var(--yellow);
-        }
-
-        /* Copy btn */
-        .cp {
-            display: inline-flex;
-            align-items: center;
-            gap: 2px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 8px;
-            cursor: pointer;
-            border: 1px solid rgba(239, 0, 0, .05);
-            background: rgba(239, 0, 0, .02);
-            color: rgba(239, 0, 0, .25);
-            transition: all .2s;
-            flex-shrink: 0;
-            margin-left: 3px;
-        }
-        .cp:hover {
-            background: rgba(239, 0, 0, .06);
-            color: var(--red);
-        }
-        .cp.ok {
-            background: rgba(34, 197, 94, .05);
-            color: var(--green);
-            border-color: rgba(34, 197, 94, .12);
-        }
-
-        /* Scan anim */
-        .sa {
-            position: relative;
-            overflow: hidden;
-            padding: 28px;
-        }
-        .sa .sl {
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--red), transparent);
-            box-shadow: 0 0 10px var(--red);
-            animation: slA 1.2s ease-in-out infinite;
-            z-index: 2;
-        }
-        @keyframes slA {
-            0% {
-                top: -2px;
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                top: 100%;
-                opacity: 0;
-            }
-        }
-        .sa-c {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        .sa-s {
-            font-size: 18px;
-            color: var(--red);
-            opacity: .4;
-        }
-        .sa-t {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 8px;
-            letter-spacing: 2px;
-            color: rgba(239, 0, 0, .25);
-        }
-
-        /* JSON */
-        .jb {
-            position: relative;
-            background: rgba(0, 0, 0, .4);
-            border: 1px solid rgba(239, 0, 0, .03);
-            border-radius: 8px;
-            margin-top: 12px;
-            overflow: hidden;
-        }
-        .jb-h {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 7px 12px;
-            background: rgba(239, 0, 0, .01);
-            border-bottom: 1px solid rgba(239, 0, 0, .02);
-        }
-        .jb-h span {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 7px;
-            letter-spacing: 2px;
-            color: rgba(239, 0, 0, .18);
-        }
-        .jb-c {
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 8px;
-            cursor: pointer;
-            border: 1px solid rgba(239, 0, 0, .05);
-            background: rgba(239, 0, 0, .01);
-            color: rgba(239, 0, 0, .25);
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 600;
-            transition: all .2s;
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
-        .jb-c:hover {
-            background: rgba(239, 0, 0, .06);
-            color: var(--red);
-        }
-        .jb-c.ok {
-            background: rgba(34, 197, 94, .05);
-            color: var(--green);
-            border-color: rgba(34, 197, 94, .12);
-        }
-        .jb-b {
-            padding: 10px 12px;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 9.5px;
-            line-height: 1.6;
-            color: #4a5a6a;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
-            max-height: 280px;
-            overflow-y: auto;
-        }
-
-        /* Error card */
-        .err-c {
-            padding: 32px;
-            text-align: center;
-        }
-        .err-c i {
-            font-size: 28px;
-            color: var(--red);
-            margin-bottom: 10px;
-        }
-        .err-c p {
-            color: var(--red);
-            font-size: 13px;
-        }
-
-        /* Warn box */
-        .wb {
-            padding: 8px 12px;
-            margin-bottom: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: rgba(239, 0, 0, .02);
-            display: flex;
-            align-items: start;
-            gap: 6px;
-        }
-        .wb i {
-            color: var(--red);
-            margin-top: 2px;
-            font-size: 9px;
-        }
-        .wb p {
-            font-size: 10px;
-            color: var(--text2);
-            line-height: 1.2;
-        }
-
-        /* Info box */
-        .ib {
-            padding: 8px 12px;
-            margin-top: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: rgba(239, 0, 0, .02);
-            display: flex;
-            align-items: start;
-            gap: 6px;
-        }
-        .ib i {
-            color: var(--red);
-            margin-top: 2px;
-            font-size: 9px;
-        }
-        .ib p {
-            font-size: 10px;
-            color: var(--text2);
-            line-height: 1.2;
-        }
-
-        /* Chat */
-        .ca {
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .cm {
-            max-width: 80%;
-            padding: 11px 15px;
-            border-radius: 12px;
-            font-size: 13.5px;
-            line-height: 1.6;
-        }
-        .cm.u {
-            align-self: flex-end;
-            border-radius: 12px 12px 3px 12px;
-            background: rgba(239, 0, 0, .06);
-            border: 1px solid rgba(239, 0, 0, .1);
-            color: #e0e6ee;
-        }
-        .cm.b {
-            align-self: flex-start;
-            border-radius: 12px 12px 12px 3px;
-            background: rgba(15, 15, 20, .9);
-            border: 1px solid rgba(239, 0, 0, .05);
-            color: #9aa5b4;
-            white-space: pre-wrap;
-        }
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes tbounce {
-            0%,
-            80%,
-            100% {
-                transform: scale(0);
-            }
-            40% {
-                transform: scale(1);
-            }
-        }
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .wm {
-            position: fixed;
-            bottom: 5px;
-            right: 8px;
-            z-index: 5;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 5px;
-            letter-spacing: 3px;
-            color: rgba(239, 0, 0, .03);
-            pointer-events: none;
-        }
-        @media(prefers-reduced-motion:reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: .01ms !important;
-                transition-duration: .01ms !important;
-                animation-iteration-count: 1 !important;
-            }
-        }
+        /* --- styles (same as previous final version) --- */
+        :root{--bg:#050508;--card:rgba(12,12,18,.92);--border:rgba(239,68,68,.06);--red:#e00;--neon:#00f0ff;--purple:#a855f7;--yellow:#fbbf24;--green:#22c55e;--pink:#ec4899;--text:#b0b8c8;--text2:#6a7588}*{margin:0;padding:0;box-sizing:border-box}::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px}html{scroll-behavior:smooth}body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;user-select:none;-webkit-user-select:none}
+        #anti-inspect{position:fixed;inset:0;z-index:99999999;background:#000;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px}#anti-inspect.show{display:flex}.ai-i{font-size:90px;color:var(--red);text-shadow:0 0 70px var(--red),0 0 140px rgba(239,0,0,.4);animation:aip .4s ease-in-out infinite}@keyframes aip{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}.ai-t{font-family:'Orbitron',sans-serif;font-size:22px;color:var(--red);letter-spacing:8px;text-shadow:0 0 30px rgba(239,0,0,.6);animation:aif .12s infinite}@keyframes aif{0%,100%{opacity:1}50%{opacity:.2}}.ai-s{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(239,0,0,.35);letter-spacing:3px}
+        #entry{position:fixed;inset:0;z-index:999998;background:#000;overflow:hidden;transition:opacity 1.2s,filter 1.2s}#entry.done{opacity:0;filter:brightness(8)blur(10px);pointer-events:none}#entry-canvas{position:absolute;inset:0;z-index:1}.e-ds{position:absolute;top:0;width:40%;height:200%;font-family:'Share Tech Mono',monospace;font-size:8px;line-height:1.3;color:rgba(239,0,0,.04);word-break:break-all;overflow:hidden;animation:dsScroll 30s linear infinite;z-index:2;pointer-events:none}.e-ds.l{left:0;text-align:left}.e-ds.r{right:0;text-align:right}@keyframes dsScroll{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}.e-cross{position:absolute;z-index:3;pointer-events:none}.e-cross::before,.e-cross::after{content:'';position:absolute;background:rgba(239,0,0,.04)}.e-cross::before{width:1px;height:100%;left:50%}.e-cross::after{height:1px;width:100%;top:50%}.e-center{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}.e-skull{width:clamp(100px,18vw,180px);height:auto;filter:drop-shadow(0 0 40px rgba(239,0,0,.5));animation:eFloat 3s ease-in-out infinite}@keyframes eFloat{0%,100%{transform:translateY(0)scale(1)}50%{transform:translateY(-12px)scale(1.03)}}.e-title{font-family:'Orbitron',sans-serif;font-size:clamp(24px,4.5vw,50px);font-weight:900;color:var(--red);letter-spacing:6px;text-shadow:0 0 40px rgba(239,0,0,.6);animation:eGlitch 3s infinite}@keyframes eGlitch{0%,92%,100%{text-shadow:0 0 40px rgba(239,0,0,.6);transform:translateX(0)}93%{text-shadow:4px 0 #fff,-4px 0 var(--red);transform:translateX(4px)}95%{text-shadow:-3px 0 var(--red),3px 0 #fff;transform:translateX(-3px)}97%{text-shadow:0 0 40px rgba(239,0,0,.6);transform:translateX(1px)}}.e-sub{font-family:'Share Tech Mono',monospace;font-size:clamp(8px,1.2vw,12px);color:rgba(239,0,0,.4);letter-spacing:5px}.e-bar{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);width:min(350px,75vw);z-index:12}.e-bar-track{height:2px;background:rgba(239,0,0,.08);border-radius:1px;overflow:hidden}.e-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--red),rgba(255,255,255,.6),var(--red));box-shadow:0 0 8px var(--red);animation:barPulse 1s infinite}@keyframes barPulse{0%,100%{box-shadow:0 0 8px var(--red)}50%{box-shadow:0 0 16px var(--red)}}.e-bar-text{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(239,0,0,.35);margin-top:6px;text-align:center;letter-spacing:2px}.e-flash{position:absolute;inset:0;z-index:20;opacity:0;pointer-events:none}.e-flash.r{background:rgba(200,0,0,.5)}.e-flash.w{background:rgba(255,255,255,.7)}.e-tear{position:absolute;left:0;right:0;height:3px;z-index:18;pointer-events:none;opacity:0;background:rgba(239,0,0,.4)}.e-tear.go{animation:tearA .1s steps(2)3}@keyframes tearA{0%{opacity:0;transform:translateY(0)skewY(0)}25%{opacity:1;transform:translateY(-4px)skewY(3deg)}75%{opacity:.8;transform:translateY(2px)skewY(-2deg)}100%{opacity:0}}.e-static{position:absolute;inset:0;z-index:15;pointer-events:none;opacity:0;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");background-size:256px}.e-static.go{animation:staticA .08s steps(3)5}@keyframes staticA{0%{opacity:0}50%{opacity:.3}100%{opacity:0}}.e-blood{position:absolute;top:0;width:3px;border-radius:0 0 2px 2px;background:linear-gradient(to bottom,rgba(180,0,0,.7),transparent);z-index:4;animation:bloodD linear infinite}@keyframes bloodD{0%{height:0;opacity:.7;transform:translateY(0)}100%{height:var(--bh);opacity:0;transform:translateY(var(--bh))}}
+        #dash-reveal{position:fixed;inset:0;z-index:100;background:var(--bg);display:none;align-items:center;justify-content:center;perspective:1200px}#dash-reveal.done{animation:drOut 1.4s cubic-bezier(.16,1,.3,1) forwards}@keyframes drOut{0%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.06)rotateX(4deg)}100%{opacity:0;transform:scale(1.15)rotateX(-8deg);pointer-events:none}}.dr-cube{width:90px;height:90px;position:relative;transform-style:preserve-3d;animation:drSpin 2s ease-in-out infinite}@keyframes drSpin{0%{transform:rotateX(0)rotateY(0)}25%{transform:rotateX(90deg)rotateY(90deg)}50%{transform:rotateX(180deg)rotateY(180deg)}75%{transform:rotateX(270deg)rotateY(270deg)}100%{transform:rotateX(360deg)rotateY(360deg)}}.dr-f{position:absolute;width:90px;height:90px;border:1px solid rgba(239,0,0,.2);background:rgba(239,0,0,.02);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:9px;color:var(--red);letter-spacing:2px}.dr-f:nth-child(1){transform:translateZ(45px)}.dr-f:nth-child(2){transform:rotateY(180deg)translateZ(45px)}.dr-f:nth-child(3){transform:rotateY(90deg)translateZ(45px)}.dr-f:nth-child(4){transform:rotateY(-90deg)translateZ(45px)}.dr-f:nth-child(5){transform:rotateX(90deg)translateZ(45px)}.dr-f:nth-child(6){transform:rotateX(-90deg)translateZ(45px)}.dr-ring{position:absolute;border-radius:50%;border:1px solid rgba(239,0,0,.08);animation:drRing 2.5s ease-in-out infinite}.dr-ring:nth-child(1){width:200px;height:200px;left:-55px;top:-55px}.dr-ring:nth-child(2){width:300px;height:300px;left:-105px;top:-105px;animation-delay:.5s}.dr-ring:nth-child(3){width:400px;height:400px;left:-155px;top:-155px;animation-delay:1s}@keyframes drRing{0%,100%{transform:scale(.9);opacity:.04}50%{transform:scale(1.1);opacity:.15}}.dr-text{position:absolute;bottom:70px;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:4px;color:rgba(239,0,0,.35);animation:drTP 1s infinite}@keyframes drTP{0%,100%{opacity:.15}50%{opacity:.6}}
+        #app{display:none;opacity:0;transform:scale(.96);transition:all .8s cubic-bezier(.16,1,.3,1)}#app.show{display:block;opacity:1;transform:scale(1)}
+        .db-bg{position:fixed;inset:0;z-index:0;overflow:hidden}.db-grid{position:absolute;inset:-60px;background-image:linear-gradient(rgba(239,0,0,.02)1px,transparent 1px),linear-gradient(90deg,rgba(239,0,0,.02)1px,transparent 1px);background-size:60px 60px;animation:gridM 50s linear infinite;transform:rotateX(60deg)translateZ(-300px);transform-origin:center bottom}@keyframes gridM{to{background-position:60px 60px}}.db-glow{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none}.db-g1{width:450px;height:450px;background:rgba(239,0,0,.04);top:-8%;right:-5%;animation:glowD 18s ease-in-out infinite alternate}.db-g2{width:350px;height:350px;background:rgba(100,0,0,.03);bottom:-5%;left:-5%;animation:glowD 14s ease-in-out infinite alternate-reverse}@keyframes glowD{0%{transform:translate(0,0)scale(1)}100%{transform:translate(30px,-25px)scale(1.15)}}.db-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03)2px,rgba(0,0,0,.03)4px);pointer-events:none}.db-vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,.65)100%);pointer-events:none}
+        .sidebar{position:fixed;left:0;top:0;bottom:0;width:225px;z-index:50;display:flex;flex-direction:column;background:rgba(6,6,10,.97);backdrop-filter:blur(30px);border-right:1px solid var(--border);transition:transform .3s}@media(max-width:1024px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}}.sb-head{padding:16px 14px 12px;border-bottom:1px solid var(--border)}.sb-brand{display:flex;align-items:baseline;gap:6px}.sb-name{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:var(--red);letter-spacing:4px;text-shadow:0 0 12px rgba(239,0,0,.25)}.sb-x{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;color:var(--red);opacity:.65}.sb-tag{font-size:5px;letter-spacing:3px;color:rgba(239,0,0,.1);margin-top:2px}.sb-enc{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;background:rgba(239,0,0,.04);border:1px solid rgba(239,0,0,.1);font-size:7px;color:var(--red);letter-spacing:1px;font-family:'Share Tech Mono',monospace;margin-top:6px}.sb-dot{width:4px;height:4px;border-radius:50%;background:var(--red);box-shadow:0 0 5px var(--red);animation:sbDot 1.5s infinite}@keyframes sbDot{0%,100%{opacity:1}50%{opacity:.15}}.sb-nav{flex:1;padding:6px 0;overflow-y:auto}.nav-i{display:flex;align-items:center;gap:8px;padding:9px 14px;margin:2px 5px;border-radius:7px;font-size:12.5px;font-weight:600;color:rgba(255,255,255,.12);cursor:pointer;transition:all .25s;border:1px solid transparent}.nav-i:hover{color:rgba(255,255,255,.35);background:rgba(239,0,0,.02)}.nav-i.act{color:var(--red);background:rgba(239,0,0,.05);border-color:rgba(239,0,0,.12);box-shadow:0 0 16px rgba(239,0,0,.04)}.nav-i i{width:15px;text-align:center;font-size:10px}.sb-foot{padding:8px 12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:5px}.sb-pulse{width:4px;height:4px;border-radius:50%;background:var(--red);position:relative;box-shadow:0 0 5px var(--red)}.sb-pulse::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1px solid var(--red);animation:sbPR 2s ease-out infinite}@keyframes sbPR{0%{transform:scale(1);opacity:.5}100%{transform:scale(3);opacity:0}}.sb-foot-t{font-size:6px;color:rgba(239,0,0,.15);letter-spacing:1px}
+        .main{margin-left:225px;position:relative;z-index:10;min-height:100vh;padding:14px 20px 80px}@media(max-width:1024px){.main{margin-left:0}}.mob-t{display:none;position:fixed;top:12px;left:12px;z-index:60;width:34px;height:34px;border-radius:8px;background:rgba(6,6,10,.95);border:1px solid var(--border);align-items:center;justify-content:center;cursor:pointer;color:var(--red);font-size:12px}@media(max-width:1024px){.mob-t{display:flex}}.hdr{display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 0 12px}.hdr-r{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;color:var(--red);letter-spacing:5px;text-shadow:0 0 12px rgba(239,0,0,.2)}.hdr-d{width:1px;height:12px;background:rgba(239,0,0,.1)}.hdr-x{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;color:var(--red);opacity:.6}
+        .pg{display:none;animation:pgIn .35s ease}.pg.act{display:block}@keyframes pgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+        .sx{position:relative;max-width:480px;margin:0 auto 28px}.sx input{width:100%;padding:12px 15px 12px 42px;background:rgba(239,0,0,.02);border:1px solid rgba(239,0,0,.07);border-radius:10px;color:#fff;font-family:'Rajdhani',sans-serif;font-size:13.5px;font-weight:500;outline:0;transition:all .3s}.sx input:focus{border-color:rgba(239,0,0,.2);box-shadow:0 0 25px rgba(239,0,0,.04)}.sx input::placeholder{color:rgba(255,255,255,.1)}.sx .si{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:rgba(239,0,0,.18);font-size:11px}.sx .sb{position:absolute;right:3px;top:50%;transform:translateY(-50%);padding:7px 16px;border-radius:7px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;border:1px solid rgba(239,0,0,.12);background:rgba(239,0,0,.05);color:var(--red);cursor:pointer;transition:all .25s}.sx .sb:hover{background:rgba(239,0,0,.1);box-shadow:0 0 18px rgba(239,0,0,.06)}
+        .mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;max-width:100%;margin:0 auto}.mc{position:relative;overflow:hidden;border-radius:12px;background:var(--card);border:1px solid var(--border);padding:16px;cursor:pointer;transition:all .3s}.mc:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.4);border-color:rgba(239,0,0,.12)}.mc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(239,0,0,.15),transparent)}.mc-ic{width:34px;height:34px;border-radius:8px;background:rgba(239,0,0,.04);border:1px solid rgba(239,0,0,.08);display:flex;align-items:center;justify-content:center;margin-bottom:10px;transition:all .3s}.mc:hover .mc-ic{background:rgba(239,0,0,.08);box-shadow:0 0 12px rgba(239,0,0,.08)}.mc-ic i{color:var(--red);font-size:13px}.mc-t{font-family:'Orbitron',sans-serif;font-size:8.5px;font-weight:700;letter-spacing:1.5px;color:#fff;margin-bottom:3px}.mc-d{font-size:10.5px;color:var(--text2);line-height:1.3}
+        .sh{display:flex;align-items:center;gap:10px;margin-bottom:16px}.sh-ic{width:38px;height:38px;border-radius:9px;background:rgba(239,0,0,.04);border:1px solid rgba(239,0,0,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}.sh-ic i{color:var(--red);font-size:14px}.sh-t{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:2.5px;color:#fff}.sh-d{font-size:9.5px;color:var(--text2)}
+        .sc{position:relative;overflow:hidden;border-radius:12px;background:var(--card);border:1px solid var(--border);margin-bottom:12px;backdrop-filter:blur(12px)}.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(239,0,0,.1),transparent)}.sc-h{padding:12px 16px;border-bottom:1px solid rgba(239,0,0,.03);display:flex;align-items:center;gap:8px}.sc-h-ic{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.sc-h-t{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:#fff;flex:1}.sc-b{padding:12px 16px}
+        .dr{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.015);gap:8px}.dr:last-child{border-bottom:0}.dk{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;font-weight:600;min-width:145px;flex-shrink:0}.dv{font-size:12.5px;color:#c0c8d8;font-weight:500;text-align:right;word-break:break-all;line-height:1.5}.dv.dg{color:var(--red)}.dv.ds{color:var(--green)}.dv.dw{color:var(--yellow)}
+        .bd{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:12px;font-size:9px;font-weight:700}.bd-r{background:rgba(239,0,0,.06);border:1px solid rgba(239,0,0,.15);color:var(--red)}.bd-g{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);color:var(--green)}.bd-y{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.15);color:var(--yellow)}
+        .cp{display:inline-flex;align-items:center;gap:2px;padding:2px 6px;border-radius:4px;font-size:8px;cursor:pointer;border:1px solid rgba(239,0,0,.05);background:rgba(239,0,0,.02);color:rgba(239,0,0,.25);transition:all .2s;flex-shrink:0;margin-left:3px}.cp:hover{background:rgba(239,0,0,.06);color:var(--red)}.cp.ok{background:rgba(34,197,94,.05);color:var(--green);border-color:rgba(34,197,94,.12)}
+        .sa{position:relative;overflow:hidden;padding:28px}.sa .sl{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);box-shadow:0 0 10px var(--red);animation:slA 1.2s ease-in-out infinite;z-index:2}@keyframes slA{0%{top:-2px;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}.sa-c{display:flex;flex-direction:column;align-items:center;gap:8px}.sa-s{font-size:18px;color:var(--red);opacity:.4}.sa-t{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:rgba(239,0,0,.25)}
+        .jb{position:relative;background:rgba(0,0,0,.4);border:1px solid rgba(239,0,0,.03);border-radius:8px;margin-top:12px;overflow:hidden}.jb-h{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:rgba(239,0,0,.01);border-bottom:1px solid rgba(239,0,0,.02)}.jb-h span{font-family:'Orbitron',sans-serif;font-size:7px;letter-spacing:2px;color:rgba(239,0,0,.18)}.jb-c{padding:3px 8px;border-radius:4px;font-size:8px;cursor:pointer;border:1px solid rgba(239,0,0,.05);background:rgba(239,0,0,.01);color:rgba(239,0,0,.25);font-family:'Rajdhani',sans-serif;font-weight:600;transition:all .2s;display:flex;align-items:center;gap:2px}.jb-c:hover{background:rgba(239,0,0,.06);color:var(--red)}.jb-c.ok{background:rgba(34,197,94,.05);color:var(--green);border-color:rgba(34,197,94,.12)}.jb-b{padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:9.5px;line-height:1.6;color:#4a5a6a;overflow-x:auto;white-space:pre-wrap;word-break:break-all;max-height:280px;overflow-y:auto}
+        .err-c{padding:32px;text-align:center}.err-c i{font-size:28px;color:var(--red);margin-bottom:10px}.err-c p{color:var(--red);font-size:13px}
+        .wb{padding:8px 12px;margin-bottom:12px;border-radius:8px;border:1px solid var(--border);background:rgba(239,0,0,.02);display:flex;align-items:start;gap:6px}.wb i{color:var(--red);margin-top:2px;font-size:9px}.wb p{font-size:10px;color:var(--text2);line-height:1.2}
+        .ib{padding:8px 12px;margin-top:12px;border-radius:8px;border:1px solid var(--border);background:rgba(239,0,0,.02);display:flex;align-items:start;gap:6px}.ib i{color:var(--red);margin-top:2px;font-size:9px}.ib p{font-size:10px;color:var(--text2);line-height:1.2}
+        .ca{flex:1;overflow-y:auto;padding-right:4px;display:flex;flex-direction:column;gap:6px}.cm{max-width:80%;padding:11px 15px;border-radius:12px;font-size:13.5px;line-height:1.6}.cm.u{align-self:flex-end;border-radius:12px 12px 3px 12px;background:rgba(239,0,0,.06);border:1px solid rgba(239,0,0,.1);color:#e0e6ee}.cm.b{align-self:flex-start;border-radius:12px 12px 12px 3px;background:rgba(15,15,20,.9);border:1px solid rgba(239,0,0,.05);color:#9aa5b4;white-space:pre-wrap}
+        .wm{position:fixed;bottom:5px;right:8px;z-index:5;font-family:'Orbitron',sans-serif;font-size:5px;letter-spacing:3px;color:rgba(239,0,0,.03);pointer-events:none}
+        @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
     </style>
 </head>
 <body>
+    <div id="anti-inspect"><div class="ai-i"><i class="fa-solid fa-skull-crossbones"></i></div><div class="ai-t">ACCESS DENIED</div><div class="ai-s">INSPECTION BLOCKED</div></div>
 
-    <div id="anti-inspect">
-        <div class="ai-i"><i class="fa-solid fa-skull-crossbones"></i></div>
-        <div class="ai-t">ACCESS DENIED</div>
-        <div class="ai-s">INSPECTION BLOCKED</div>
-    </div>
-
-    <!-- ENTRY -->
     <div id="entry">
-        <canvas id="entry-canvas"></canvas>
-        <div class="e-ds l" id="ds-l">01001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 11010010</div>
-        <div class="e-ds r" id="ds-r">01001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 01110010</div>
+        <div class="e-ds l" id="ds-l">01001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 1101001001001110 VISHUUX69::INIT 0xF4A2 CONNECT::SECURE 10110011 AUTH::VERIFY 0x9E7B DATA::STREAM 11010010</div>
+        <div class="e-ds r" id="ds-r">01001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 0111001001001011 MAERTS::ATAD B7E9x0 YFIREV::HTUA 11001101 ERUCES::TCENNOC 2A4Fx0 TINI::VISHUUX69 01110010</div>
         <div class="e-cross" style="inset:0"></div>
         <div class="e-cross" style="inset:10%;width:80%;height:80%"></div>
-        <div class="e-flash r" id="efR"></div>
-        <div class="e-flash w" id="efW"></div>
-        <div class="e-static" id="eSt"></div>
-        <div class="e-tear go" style="top:25%"></div>
-        <div class="e-tear go" style="top:50%"></div>
-        <div class="e-tear go" style="top:72%"></div>
         <div class="e-center">
-            <svg class="e-skull" viewBox="0 0 200 220" fill="none">
-                <path d="M100 10C55 10 20 50 20 95c0 25 10 45 25 60l-5 35c0 5 4 10 10 10h100c6 0 10-5 10-10l-5-35c15-15 25-35 25-60 0-45-35-85-80-85z" stroke="#e00" stroke-width="1.5" fill="none" opacity=".7"></path>
-                <ellipse cx="72" cy="85" rx="16" ry="20" stroke="#e00" stroke-width="1" fill="none" opacity=".5"></ellipse>
-                <ellipse cx="128" cy="85" rx="16" ry="20" stroke="#e00" stroke-width="1" fill="none" opacity=".5"></ellipse>
-                <circle cx="72" cy="85" r="7" fill="#e00" opacity="0"><animate attributeName="opacity" values="0;1;.3;.8;.1;.7;0" dur="1.5s" repeatCount="indefinite"></animate></circle>
-                <circle cx="128" cy="85" r="7" fill="#e00" opacity="0"><animate attributeName="opacity" values="0;.8;.4;.9;.2;.6;0" dur="1.8s" repeatCount="indefinite"></animate></circle>
-                <path d="M85 120h30" stroke="#e00" stroke-width=".8" opacity=".4"></path>
-                <path d="M75 140c0 0 12 15 25 15s25-15 25-15" stroke="#e00" stroke-width="1" fill="none" opacity=".4"></path>
-            </svg>
+            <svg class="e-skull" viewBox="0 0 200 220" fill="none"><path d="M100 10C55 10 20 50 20 95c0 25 10 45 25 60l-5 35c0 5 4 10 10 10h100c6 0 10-5 10-10l-5-35c15-15 25-35 25-60 0-45-35-85-80-85z" stroke="#e00" stroke-width="1.5" fill="none" opacity=".7"/><ellipse cx="72" cy="85" rx="16" ry="20" stroke="#e00" stroke-width="1" fill="none" opacity=".5"/><ellipse cx="128" cy="85" rx="16" ry="20" stroke="#e00" stroke-width="1" fill="none" opacity=".5"/><circle cx="72" cy="85" r="7" fill="#e00" opacity="0"><animate attributeName="opacity" values="0;1;.3;.8;.1;.7;0" dur="1.5s" repeatCount="indefinite"/></circle><circle cx="128" cy="85" r="7" fill="#e00" opacity="0"><animate attributeName="opacity" values="0;.8;.4;.9;.2;.6;0" dur="1.8s" repeatCount="indefinite"/></circle><path d="M85 120h30" stroke="#e00" stroke-width=".8" opacity=".4"/><path d="M75 140c0 0 12 15 25 15s25-15 25-15" stroke="#e00" stroke-width="1" fill="none" opacity=".4"/></svg>
             <div class="e-title">VISHUUX69</div>
             <div class="e-sub">INTEL X — SYSTEM BREACHED</div>
         </div>
-        <div class="e-bar">
-            <div class="e-bar-track"><div class="e-bar-fill" id="eBarFill"></div></div>
-            <div class="e-bar-text" id="eBarText">INJECTING PAYLOAD...</div>
-        </div>
+        <div class="e-bar"><div class="e-bar-track"><div class="e-bar-fill" id="eBarFill"></div></div><div class="e-bar-text" id="eBarText">INJECTING PAYLOAD...</div></div>
     </div>
 
-    <!-- DASH REVEAL -->
     <div id="dash-reveal">
         <div class="dr-ring"></div><div class="dr-ring"></div><div class="dr-ring"></div>
-        <div class="dr-cube">
-            <div class="dr-f">VISHUUX69</div><div class="dr-f">INTEL</div><div class="dr-f" style="color:var(--red)">X</div>
-            <div class="dr-f" style="color:var(--red)">DEAD</div><div class="dr-f">SECURE</div><div class="dr-f" style="color:var(--yellow)">READY</div>
-        </div>
+        <div class="dr-cube"><div class="dr-f">VISHUUX69</div><div class="dr-f">INTEL</div><div class="dr-f" style="color:var(--red)">X</div><div class="dr-f" style="color:var(--red)">DEAD</div><div class="dr-f">SECURE</div><div class="dr-f" style="color:var(--yellow)">READY</div></div>
         <div class="dr-text">LOADING DASHBOARD...</div>
     </div>
 
-    <!-- APP -->
     <div id="app">
-        <div class="db-bg">
-            <div class="db-grid"></div>
-            <div class="db-glow db-g1"></div>
-            <div class="db-glow db-g2"></div>
-            <div class="db-scan"></div>
-            <div class="db-vig"></div>
-        </div>
+        <div class="db-bg"><div class="db-grid"></div><div class="db-glow db-g1"></div><div class="db-glow db-g2"></div><div class="db-scan"></div><div class="db-vig"></div></div>
         <div id="ptcls"></div>
         <div class="wm">MADE BY VISHUUX69</div>
         <button class="mob-t" id="mob-t"><i class="fa-solid fa-bars"></i></button>
 
         <aside class="sidebar" id="sidebar">
-            <div class="sb-head">
-                <div class="sb-brand"><span class="sb-name">VISHUUX69</span><span class="sb-x">INTEL X</span></div>
-                <div class="sb-tag">INTELLIGENCE PLATFORM</div>
-                <div class="sb-enc"><span class="sb-dot"></span>ENCRYPTED</div>
-            </div>
+            <div class="sb-head"><div class="sb-brand"><span class="sb-name">VISHUUX69</span><span class="sb-x">INTEL X</span></div><div class="sb-tag">INTELLIGENCE PLATFORM</div><div class="sb-enc"><span class="sb-dot"></span>ENCRYPTED</div></div>
             <nav class="sb-nav">
                 <div class="nav-i act" data-page="home"><i class="fa-solid fa-grid-2"></i>Dashboard</div>
-                <div class="nav-i" data-page="vehicle"><i class="fa-solid fa-car"></i>Vehicle Lookup</div>
-                <div class="nav-i" data-page="ip"><i class="fa-solid fa-globe"></i>IP Intelligence</div>
                 <div class="nav-i" data-page="mobile"><i class="fa-solid fa-mobile-screen"></i>Mobile Trace</div>
-                <div class="nav-i" data-page="email"><i class="fa-solid fa-envelope"></i>Email Recon</div>
                 <div class="nav-i" data-page="aadhar"><i class="fa-solid fa-fingerprint"></i>Aadhaar Verify</div>
+                <div class="nav-i" data-page="aadhar_family"><i class="fa-solid fa-people-group"></i>Aadhaar Family</div>
+                <div class="nav-i" data-page="email"><i class="fa-solid fa-envelope"></i>Email Recon</div>
+                <div class="nav-i" data-page="paytm"><i class="fa-solid fa-credit-card"></i>PayTM Leak</div>
+                <div class="nav-i" data-page="rc_adv"><i class="fa-solid fa-car"></i>RC Advanced</div>
+                <div class="nav-i" data-page="rc_v2"><i class="fa-solid fa-car-side"></i>RC V2</div>
+                <div class="nav-i" data-page="github"><i class="fa-brands fa-github"></i>GitHub Info</div>
+                <div class="nav-i" data-page="ip"><i class="fa-solid fa-globe"></i>IP Geolocation</div>
                 <div class="nav-i" data-page="ai"><i class="fa-solid fa-brain"></i>AI Assistant</div>
             </nav>
             <div class="sb-foot"><div class="sb-pulse"></div><span class="sb-foot-t">DARK NET ACTIVE</span></div>
@@ -1452,34 +87,16 @@
                 <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
                 <div class="sx"><i class="fa-solid fa-satellite-dish si"></i><input type="text" id="home-search" placeholder="Search anything... IP, mobile, vehicle, email"><button class="sb" onclick="handleGlobalSearch()">SCAN</button></div>
                 <div class="mg">
-                    <div class="mc" onclick="goPage('vehicle')"><div class="mc-ic"><i class="fa-solid fa-car"></i></div><div class="mc-t">VEHICLE LOOKUP</div><div class="mc-d">RC details, owner, insurance, fitness</div></div>
-                    <div class="mc" onclick="goPage('ip')"><div class="mc-ic"><i class="fa-solid fa-globe"></i></div><div class="mc-t">IP INTELLIGENCE</div><div class="mc-d">Geo-location, ISP, threat analysis</div></div>
-                    <div class="mc" onclick="goPage('mobile')"><div class="mc-ic"><i class="fa-solid fa-mobile-screen"></i></div><div class="mc-t">MOBILE TRACE</div><div class="mc-d">Operator, circle, location data</div></div>
-                    <div class="mc" onclick="goPage('email')"><div class="mc-ic"><i class="fa-solid fa-envelope"></i></div><div class="mc-t">EMAIL RECON</div><div class="mc-d">Breach check, MX records, spam score</div></div>
-                    <div class="mc" onclick="goPage('aadhar')"><div class="mc-ic"><i class="fa-solid fa-fingerprint"></i></div><div class="mc-t">AADHAAR VERIFY</div><div class="mc-d">Authorized verification only</div></div>
-                    <div class="mc" onclick="goPage('ai')"><div class="mc-ic"><i class="fa-solid fa-brain"></i></div><div class="mc-t">AI ASSISTANT</div><div class="mc-d">Intelligent chat &amp; analysis</div></div>
-                </div>
-            </div>
-
-            <!-- VEHICLE -->
-            <div class="pg" id="pg-vehicle">
-                <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
-                <div style="max-width:840px;margin:0 auto">
-                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-car"></i></div><div><div class="sh-t">VEHICLE LOOKUP</div><div class="sh-d">RC, owner, insurance, fitness</div></div></div>
-                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="v-input" placeholder="RC number... e.g. UP65BN3645" maxlength="15"><button class="sb" onclick="doVehicleSearch()">Scan</button></div>
-                    <div id="v-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING DATABASES...</span></div></div></div></div>
-                    <div id="v-result" style="margin-top:14px"></div>
-                </div>
-            </div>
-
-            <!-- IP -->
-            <div class="pg" id="pg-ip">
-                <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
-                <div style="max-width:840px;margin:0 auto">
-                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-globe"></i></div><div><div class="sh-t">IP INTELLIGENCE</div><div class="sh-d">Geo, ISP, threats</div></div></div>
-                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="ip-input" placeholder="IP address... e.g. 8.8.8.8"><button class="sb" onclick="doIPSearch()">Scan</button></div>
-                    <div id="ip-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING DATABASES...</span></div></div></div></div>
-                    <div id="ip-result" style="margin-top:14px"></div>
+                    <div class="mc" onclick="goPage('mobile')"><div class="mc-ic"><i class="fa-solid fa-mobile-screen"></i></div><div class="mc-t">MOBILE TRACE</div><div class="mc-d">Operator, circle, location</div></div>
+                    <div class="mc" onclick="goPage('aadhar')"><div class="mc-ic"><i class="fa-solid fa-fingerprint"></i></div><div class="mc-t">AADHAAR VERIFY</div><div class="mc-d">Basic verification</div></div>
+                    <div class="mc" onclick="goPage('aadhar_family')"><div class="mc-ic"><i class="fa-solid fa-people-group"></i></div><div class="mc-t">AADHAAR FAMILY</div><div class="mc-d">Linked family members</div></div>
+                    <div class="mc" onclick="goPage('email')"><div class="mc-ic"><i class="fa-solid fa-envelope"></i></div><div class="mc-t">EMAIL RECON</div><div class="mc-d">Breach, MX, reputation</div></div>
+                    <div class="mc" onclick="goPage('paytm')"><div class="mc-ic"><i class="fa-solid fa-credit-card"></i></div><div class="mc-t">PAYTM LEAK</div><div class="mc-d">KYC &amp; transaction</div></div>
+                    <div class="mc" onclick="goPage('rc_adv')"><div class="mc-ic"><i class="fa-solid fa-car"></i></div><div class="mc-t">RC ADVANCED</div><div class="mc-d">Full RC + insurance</div></div>
+                    <div class="mc" onclick="goPage('rc_v2')"><div class="mc-ic"><i class="fa-solid fa-car-side"></i></div><div class="mc-t">RC V2</div><div class="mc-d">Alternate RC lookup</div></div>
+                    <div class="mc" onclick="goPage('github')"><div class="mc-ic"><i class="fa-brands fa-github"></i></div><div class="mc-t">GITHUB INFO</div><div class="mc-d">Profile, repos, activity</div></div>
+                    <div class="mc" onclick="goPage('ip')"><div class="mc-ic"><i class="fa-solid fa-globe"></i></div><div class="mc-t">IP GEOLOCATION</div><div class="mc-d">Location, ISP, ASN</div></div>
+                    <div class="mc" onclick="goPage('ai')"><div class="mc-ic"><i class="fa-solid fa-brain"></i></div><div class="mc-t">AI ASSISTANT</div><div class="mc-d">Intelligent chat</div></div>
                 </div>
             </div>
 
@@ -1487,21 +104,10 @@
             <div class="pg" id="pg-mobile">
                 <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
                 <div style="max-width:840px;margin:0 auto">
-                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-mobile-screen"></i></div><div><div class="sh-t">MOBILE TRACE</div><div class="sh-d">Operator, circle, location data</div></div></div>
-                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="m-input" placeholder="10-digit mobile number... e.g. 9999999991" maxlength="10"><button class="sb" onclick="doMobileSearch()">Scan</button></div>
-                    <div id="m-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING DATABASES...</span></div></div></div></div>
+                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-mobile-screen"></i></div><div><div class="sh-t">MOBILE TRACE</div><div class="sh-d">Operator, circle, location</div></div></div>
+                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="m-input" placeholder="10-digit mobile... e.g. 9999999991"><button class="sb" onclick="doMobileSearch()">Scan</button></div>
+                    <div id="m-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING...</span></div></div></div></div>
                     <div id="m-result" style="margin-top:14px"></div>
-                </div>
-            </div>
-
-            <!-- EMAIL -->
-            <div class="pg" id="pg-email">
-                <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
-                <div style="max-width:840px;margin:0 auto">
-                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-envelope"></i></div><div><div class="sh-t">EMAIL RECON</div><div class="sh-d">Breach, MX, domain</div></div></div>
-                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="email" id="e-input" placeholder="Email address... e.g. target@domain.com"><button class="sb" onclick="doEmailSearch()">Scan</button></div>
-                    <div id="e-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING DATABASES...</span></div></div></div></div>
-                    <div id="e-result" style="margin-top:14px"></div>
                 </div>
             </div>
 
@@ -1509,11 +115,87 @@
             <div class="pg" id="pg-aadhar">
                 <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
                 <div style="max-width:840px;margin:0 auto">
-                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-fingerprint"></i></div><div><div class="sh-t">AADHAAR VERIFY</div><div class="sh-d">Authorized verification only</div></div></div>
-                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="a-input" placeholder="12-digit Aadhaar number..." maxlength="12"><button class="sb" onclick="doAadharSearch()">Scan</button></div>
-                    <div id="a-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING DATABASES...</span></div></div></div></div>
+                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-fingerprint"></i></div><div><div class="sh-t">AADHAAR VERIFY</div><div class="sh-d">Basic verification</div></div></div>
+                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="a-input" placeholder="12-digit Aadhaar..."><button class="sb" onclick="doAadharSearch()">Scan</button></div>
+                    <div id="a-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING...</span></div></div></div></div>
                     <div id="a-result" style="margin-top:14px"></div>
-                    <div class="ib"><i class="fa-solid fa-triangle-exclamation"></i><p>Unauthorized access is logged and reported.</p></div>
+                </div>
+            </div>
+
+            <!-- AADHAAR FAMILY -->
+            <div class="pg" id="pg-aadhar_family">
+                <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
+                <div style="max-width:840px;margin:0 auto">
+                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-people-group"></i></div><div><div class="sh-t">AADHAAR FAMILY</div><div class="sh-d">Linked family members</div></div></div>
+                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="af-input" placeholder="12-digit Aadhaar..."><button class="sb" onclick="doAadharFamilySearch()">Scan</button></div>
+                    <div id="af-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING...</span></div></div></div></div>
+                    <div id="af-result" style="margin-top:14px"></div>
+                </div>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="pg" id="pg-email">
+                <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
+                <div style="max-width:840px;margin:0 auto">
+                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-envelope"></i></div><div><div class="sh-t">EMAIL RECON</div><div class="sh-d">Breach, MX, reputation</div></div></div>
+                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="email" id="e-input" placeholder="Email address..."><button class="sb" onclick="doEmailSearch()">Scan</button></div>
+                    <div id="e-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING...</span></div></div></div></div>
+                    <div id="e-result" style="margin-top:14px"></div>
+                </div>
+            </div>
+
+            <!-- PAYTM -->
+            <div class="pg" id="pg-paytm">
+                <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
+                <div style="max-width:840px;margin:0 auto">
+                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-credit-card"></i></div><div><div class="sh-t">PAYTM LEAK</div><div class="sh-d">KYC &amp; transaction</div></div></div>
+                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="paytm-input" placeholder="Mobile or email..."><button class="sb" onclick="doPaytmSearch()">Scan</button></div>
+                    <div id="paytm-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING...</span></div></div></div></div>
+                    <div id="paytm-result" style="margin-top:14px"></div>
+                </div>
+            </div>
+
+            <!-- RC ADVANCED -->
+            <div class="pg" id="pg-rc_adv">
+                <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
+                <div style="max-width:840px;margin:0 auto">
+                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-car"></i></div><div><div class="sh-t">RC ADVANCED</div><div class="sh-d">Full RC + insurance</div></div></div>
+                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="rcadv-input" placeholder="Vehicle number..."><button class="sb" onclick="doRCAdvSearch()">Scan</button></div>
+                    <div id="rcadv-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING...</span></div></div></div></div>
+                    <div id="rcadv-result" style="margin-top:14px"></div>
+                </div>
+            </div>
+
+            <!-- RC V2 -->
+            <div class="pg" id="pg-rc_v2">
+                <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
+                <div style="max-width:840px;margin:0 auto">
+                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-car-side"></i></div><div><div class="sh-t">RC V2</div><div class="sh-d">Alternate RC lookup</div></div></div>
+                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="rcv2-input" placeholder="Vehicle number..."><button class="sb" onclick="doRCV2Search()">Scan</button></div>
+                    <div id="rcv2-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING...</span></div></div></div></div>
+                    <div id="rcv2-result" style="margin-top:14px"></div>
+                </div>
+            </div>
+
+            <!-- GITHUB -->
+            <div class="pg" id="pg-github">
+                <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
+                <div style="max-width:840px;margin:0 auto">
+                    <div class="sh"><div class="sh-ic"><i class="fa-brands fa-github"></i></div><div><div class="sh-t">GITHUB INFO</div><div class="sh-d">Profile, repos, activity</div></div></div>
+                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="github-input" placeholder="GitHub username..."><button class="sb" onclick="doGithubSearch()">Scan</button></div>
+                    <div id="github-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING...</span></div></div></div></div>
+                    <div id="github-result" style="margin-top:14px"></div>
+                </div>
+            </div>
+
+            <!-- IP -->
+            <div class="pg" id="pg-ip">
+                <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
+                <div style="max-width:840px;margin:0 auto">
+                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-globe"></i></div><div><div class="sh-t">IP GEOLOCATION</div><div class="sh-d">Location, ISP, ASN</div></div></div>
+                    <div class="sx" style="max-width:100%"><i class="fa-solid fa-magnifying-glass si"></i><input type="text" id="ip-input" placeholder="IP address..."><button class="sb" onclick="doIPSearch()">Scan</button></div>
+                    <div id="ip-loading" style="display:none;margin-top:14px"><div class="sc"><div class="sa"><div class="sl"></div><div class="sa-c"><i class="fa-solid fa-satellite-dish fa-spin sa-s"></i><span class="sa-t">SCANNING...</span></div></div></div></div>
+                    <div id="ip-result" style="margin-top:14px"></div>
                 </div>
             </div>
 
@@ -1521,13 +203,11 @@
             <div class="pg" id="pg-ai">
                 <div class="hdr"><span class="hdr-r">VISHUUX69</span><span class="hdr-d"></span><span class="hdr-x">INTEL X</span></div>
                 <div style="max-width:840px;margin:0 auto">
-                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-brain"></i></div><div><div class="sh-t">AI ASSISTANT</div><div class="sh-d">Intelligent chat &amp; analysis</div></div></div>
+                    <div class="sh"><div class="sh-ic"><i class="fa-solid fa-brain"></i></div><div><div class="sh-t">AI ASSISTANT</div><div class="sh-d">Intelligent chat</div></div></div>
                     <div class="sc" style="min-height:300px">
                         <div class="sc-h"><div class="sc-h-ic" style="color:var(--red)"><i class="fa-solid fa-robot"></i></div><div class="sc-h-t">VISHUUX69 AI</div></div>
                         <div class="sc-b">
-                            <div class="ca" id="ai-chat">
-                                <div class="cm b">Hey. What do you need?</div>
-                            </div>
+                            <div class="ca" id="ai-chat"><div class="cm b">Hey. What do you need?</div></div>
                             <div class="sx" style="max-width:100%;margin-top:12px"><i class="fa-solid fa-pen si"></i><input type="text" id="ai-input" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')doAI()"><button class="sb" onclick="doAI()">Send</button></div>
                         </div>
                     </div>
@@ -1544,22 +224,16 @@
             const barText = document.getElementById('eBarText');
             const dashReveal = document.getElementById('dash-reveal');
             const app = document.getElementById('app');
-
             let progress = 0;
             const msgs = ['INJECTING PAYLOAD...', 'DECRYPTING KEYS...', 'BYPASSING FIREWALL...', 'ACCESS GRANTED'];
             let msgIdx = 0;
-
             const interval = setInterval(() => {
                 progress += Math.random() * 8 + 2;
                 if (progress > 100) progress = 100;
                 barFill.style.width = progress + '%';
-                if (progress > 30 && msgIdx < 1) { msgIdx = 1;
-                    barText.textContent = msgs[1]; }
-                if (progress > 60 && msgIdx < 2) { msgIdx = 2;
-                    barText.textContent = msgs[2]; }
-                if (progress > 85 && msgIdx < 3) { msgIdx = 3;
-                    barText.textContent = msgs[3]; }
-
+                if (progress > 30 && msgIdx < 1) { msgIdx = 1; barText.textContent = msgs[1]; }
+                if (progress > 60 && msgIdx < 2) { msgIdx = 2; barText.textContent = msgs[2]; }
+                if (progress > 85 && msgIdx < 3) { msgIdx = 3; barText.textContent = msgs[3]; }
                 if (progress >= 100) {
                     clearInterval(interval);
                     barText.textContent = 'SYSTEM UNLOCKED';
@@ -1580,12 +254,10 @@
             }, 80);
         });
 
-        // ===== PARTICLES =====
         function initParticles() {
             const container = document.getElementById('ptcls');
             for (let i = 0; i < 50; i++) {
                 const p = document.createElement('div');
-                p.className = 'db-ptcl';
                 p.style.position = 'absolute';
                 p.style.background = 'rgba(239,0,0,.05)';
                 p.style.borderRadius = '50%';
@@ -1603,11 +275,15 @@
         const navItems = document.querySelectorAll('.nav-i');
         const pages = {
             home: document.getElementById('pg-home'),
-            vehicle: document.getElementById('pg-vehicle'),
-            ip: document.getElementById('pg-ip'),
             mobile: document.getElementById('pg-mobile'),
-            email: document.getElementById('pg-email'),
             aadhar: document.getElementById('pg-aadhar'),
+            aadhar_family: document.getElementById('pg-aadhar_family'),
+            email: document.getElementById('pg-email'),
+            paytm: document.getElementById('pg-paytm'),
+            rc_adv: document.getElementById('pg-rc_adv'),
+            rc_v2: document.getElementById('pg-rc_v2'),
+            github: document.getElementById('pg-github'),
+            ip: document.getElementById('pg-ip'),
             ai: document.getElementById('pg-ai')
         };
 
@@ -1616,12 +292,8 @@
                 navItems.forEach(n => n.classList.remove('act'));
                 this.classList.add('act');
                 const page = this.dataset.page;
-                Object.keys(pages).forEach(key => {
-                    pages[key].classList.toggle('act', key === page);
-                });
-                if (window.innerWidth <= 1024) {
-                    document.getElementById('sidebar').classList.remove('open');
-                }
+                Object.keys(pages).forEach(key => pages[key].classList.toggle('act', key === page));
+                if (window.innerWidth <= 1024) document.getElementById('sidebar').classList.remove('open');
             });
         });
 
@@ -1630,46 +302,31 @@
         });
 
         function goPage(page) {
-            navItems.forEach(n => {
-                n.classList.toggle('act', n.dataset.page === page);
-            });
-            Object.keys(pages).forEach(key => {
-                pages[key].classList.toggle('act', key === page);
-            });
-            if (window.innerWidth <= 1024) {
-                document.getElementById('sidebar').classList.remove('open');
-            }
+            navItems.forEach(n => n.classList.toggle('act', n.dataset.page === page));
+            Object.keys(pages).forEach(key => pages[key].classList.toggle('act', key === page));
+            if (window.innerWidth <= 1024) document.getElementById('sidebar').classList.remove('open');
         }
 
         // ===== GLOBAL SEARCH =====
         function handleGlobalSearch() {
-            const q = document.getElementById('home-search').value.trim().toLowerCase();
+            const q = document.getElementById('home-search').value.trim();
             if (!q) return;
-            if (q.match(/^\d{10}$/)) { goPage('mobile');
-                document.getElementById('m-input').value = q;
-                doMobileSearch(); } else if (q.match(/^\d+\.\d+\.\d+\.\d+$/)) { goPage('ip');
-                document.getElementById('ip-input').value = q;
-                doIPSearch(); } else if (q.includes('@')) { goPage('email');
-                document.getElementById('e-input').value = q;
-                doEmailSearch(); } else if (q.match(/^[a-z]{2}\d{1,2}[a-z]{1,2}\d{4}$/i)) { goPage('vehicle');
-                document.getElementById('v-input').value = q.toUpperCase();
-                doVehicleSearch(); } else if (q.match(/^\d{12}$/)) { goPage('aadhar');
-                document.getElementById('a-input').value = q;
-                doAadharSearch(); } else { goPage('ai');
-                document.getElementById('ai-input').value = q;
-                doAI(); }
+            if (/^\d{10}$/.test(q)) { goPage('mobile'); document.getElementById('m-input').value = q; doMobileSearch(); }
+            else if (/^\d+\.\d+\.\d+\.\d+$/.test(q)) { goPage('ip'); document.getElementById('ip-input').value = q; doIPSearch(); }
+            else if (q.includes('@')) { goPage('email'); document.getElementById('e-input').value = q; doEmailSearch(); }
+            else if (/^[a-z]{2}\d{1,2}[a-z]{1,2}\d{4}$/i.test(q)) { goPage('rc_adv'); document.getElementById('rcadv-input').value = q.toUpperCase(); doRCAdvSearch(); }
+            else if (/^\d{12}$/.test(q)) { goPage('aadhar'); document.getElementById('a-input').value = q; doAadharSearch(); }
+            else { goPage('ai'); document.getElementById('ai-input').value = q; doAI(); }
         }
 
         // ===== CLEAN RESPONSE =====
         function cleanResponse(data) {
             if (typeof data === 'string') {
-                try { data = JSON.parse(data); } catch (e) { return data; }
+                try { data = JSON.parse(data); } catch(e) { return data; }
             }
-            if (Array.isArray(data)) {
-                return data.map(item => cleanResponse(item));
-            }
+            if (Array.isArray(data)) return data.map(item => cleanResponse(item));
             if (data && typeof data === 'object') {
-                const blockedKeys = ['developer', 'channel', 'credits', 'developer_contact', 'join_channel', 'contact', 'credit', 'owner', 'telegram', 'github', 'website', 'dev', 'support'];
+                const blockedKeys = ['developer', 'channel', 'credits', 'developer_contact', 'join_channel', 'contact', 'credit', 'owner', 'telegram', 'github', 'website', 'dev', 'support', 'dm', 'buy', 'key'];
                 const newObj = {};
                 for (const [key, value] of Object.entries(data)) {
                     if (!blockedKeys.includes(key.toLowerCase())) {
@@ -1685,25 +342,16 @@
         function showResult(containerId, data, isError) {
             const container = document.getElementById(containerId);
             if (isError) {
-                container.innerHTML =
-                    `<div class="err-c"><i class="fa-solid fa-circle-exclamation"></i><p>${data}</p></div>`;
+                container.innerHTML = `<div class="err-c"><i class="fa-solid fa-circle-exclamation"></i><p>${data}</p></div>`;
                 return;
             }
-
             let cleanedData = data;
             try {
                 const parsed = JSON.parse(data);
                 const cleaned = cleanResponse(parsed);
                 cleanedData = JSON.stringify(cleaned, null, 2);
-            } catch (e) {
-                // If not JSON, just use raw (but we'll still try to remove common credit patterns if it's plain text)
-                cleanedData = data;
-            }
-
-            container.innerHTML = `
-                <div class="jb"><div class="jb-h"><span>◈ RESULT</span><button class="jb-c" onclick="copyResult(this)">⎘ COPY</button></div>
-                <div class="jb-b">${cleanedData}</div></div>
-            `;
+            } catch(e) { /* keep raw */ }
+            container.innerHTML = `<div class="jb"><div class="jb-h"><span>◈ RESULT</span><button class="jb-c" onclick="copyResult(this)">⎘ COPY</button></div><div class="jb-b">${cleanedData}</div></div>`;
         }
 
         function copyResult(btn) {
@@ -1712,22 +360,18 @@
             navigator.clipboard.writeText(text).then(() => {
                 btn.textContent = '✓ COPIED';
                 btn.classList.add('ok');
-                setTimeout(() => { btn.textContent = '⎘ COPY';
-                    btn.classList.remove('ok'); }, 1500);
+                setTimeout(() => { btn.textContent = '⎘ COPY'; btn.classList.remove('ok'); }, 1500);
             });
         }
 
-        // ===== PROXY & API CALL (Self-proxy) =====
+        // ===== PROXY CALL =====
         async function callAPI(url, loadingId, resultId) {
             document.getElementById(loadingId).style.display = 'block';
             document.getElementById(resultId).innerHTML = '';
-
             try {
-                // Use your own Vercel serverless proxy
                 const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
                 const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(15000) });
                 document.getElementById(loadingId).style.display = 'none';
-
                 if (!res.ok) {
                     const errText = await res.text();
                     showResult(resultId, `HTTP ${res.status}\n${errText}`, true);
@@ -1742,45 +386,53 @@
         }
 
         // ===== API FUNCTIONS =====
-        function doVehicleSearch() {
-            const q = document.getElementById('v-input').value.trim();
+        function doMobileSearch() {
+            const q = document.getElementById('m-input').value.trim();
             if (!q) return;
-            const url =
-                `https://vehicleto-adavanceinfo-noobster.com-dashbord63hh7qe4.workers.dev/?rc=${q}`;
-            callAPI(url, 'v-loading', 'v-result');
+            callAPI(`https://hitech-info-noobster.com-dashbord63hh7qe4.workers.dev/search?mobile=${q}`, 'm-loading', 'm-result');
         }
-
+        function doAadharSearch() {
+            const q = document.getElementById('a-input').value.trim();
+            if (!q) return;
+            callAPI(`https://hitech-info-noobster.com-dashbord63hh7qe4.workers.dev/aadhar?aadhar=${q}`, 'a-loading', 'a-result');
+        }
+        function doAadharFamilySearch() {
+            const q = document.getElementById('af-input').value.trim();
+            if (!q) return;
+            callAPI(`https://adhaar2family-1year.noob73613.workers.dev/?key=NOOBSTER&aadhaar=${q}`, 'af-loading', 'af-result');
+        }
+        function doEmailSearch() {
+            const q = document.getElementById('e-input').value.trim();
+            if (!q) return;
+            callAPI(`https://hitech-info-noobster.com-dashbord63hh7qe4.workers.dev/email?email=${q}`, 'e-loading', 'e-result');
+        }
+        function doPaytmSearch() {
+            const q = document.getElementById('paytm-input').value.trim();
+            if (!q) return;
+            callAPI(`https://paytm-leakinfo-noobster.com-dashbord63hh7qe4.workers.dev/?key=@noob11001&info=${q}`, 'paytm-loading', 'paytm-result');
+        }
+        function doRCAdvSearch() {
+            const q = document.getElementById('rcadv-input').value.trim();
+            if (!q) return;
+            callAPI(`https://vehicleto-adavanceinfo-noobster.com-dashbord63hh7qe4.workers.dev/?rc=${q}`, 'rcadv-loading', 'rcadv-result');
+        }
+        function doRCV2Search() {
+            const q = document.getElementById('rcv2-input').value.trim();
+            if (!q) return;
+            callAPI(`https://vehicle2info-noobster.com-dashbord63hh7qe4.workers.dev/?key=@noob11001&rc=${q}`, 'rcv2-loading', 'rcv2-result');
+        }
+        function doGithubSearch() {
+            const q = document.getElementById('github-input').value.trim();
+            if (!q) return;
+            callAPI(`https://github2info-noobster.com-dashbord63hh7qe4.workers.dev/?username=${q}`, 'github-loading', 'github-result');
+        }
         function doIPSearch() {
             const q = document.getElementById('ip-input').value.trim();
             if (!q) return;
             callAPI(`https://ipwho.is/${q}`, 'ip-loading', 'ip-result');
         }
 
-        function doMobileSearch() {
-            const q = document.getElementById('m-input').value.trim();
-            if (!q) return;
-            const url =
-                `https://hitech-info-noobster.com-dashbord63hh7qe4.workers.dev/search?mobile=${q}`;
-            callAPI(url, 'm-loading', 'm-result');
-        }
-
-        function doEmailSearch() {
-            const q = document.getElementById('e-input').value.trim();
-            if (!q) return;
-            const url =
-                `https://hitech-info-noobster.com-dashbord63hh7qe4.workers.dev/email?email=${q}`;
-            callAPI(url, 'e-loading', 'e-result');
-        }
-
-        function doAadharSearch() {
-            const q = document.getElementById('a-input').value.trim();
-            if (!q) return;
-            const url =
-                `https://hitech-info-noobster.com-dashbord63hh7qe4.workers.dev/aadhar?aadhar=${q}`;
-            callAPI(url, 'a-loading', 'a-result');
-        }
-
-        // ===== AI CHAT =====
+        // ===== AI =====
         async function doAI() {
             const input = document.getElementById('ai-input');
             const q = input.value.trim();
@@ -1792,29 +444,26 @@
             chat.appendChild(userMsg);
             input.value = '';
             chat.scrollTop = chat.scrollHeight;
-
             const botMsg = document.createElement('div');
             botMsg.className = 'cm b';
             botMsg.textContent = '⏳ Thinking...';
             chat.appendChild(botMsg);
             chat.scrollTop = chat.scrollHeight;
-
             try {
-                const url =
-                    `https://wormgpt.freeapihub.workers.dev/chat?q=${encodeURIComponent(q)}`;
+                const url = `https://wormgpt.freeapihub.workers.dev/chat?q=${encodeURIComponent(q)}`;
                 const proxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
                 const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(20000) });
                 const text = await res.text();
                 let json = text;
-                try { json = JSON.stringify(cleanResponse(JSON.parse(text)), null, 2); } catch (e) {}
+                try { json = JSON.stringify(cleanResponse(JSON.parse(text)), null, 2); } catch(e) {}
                 botMsg.textContent = json.slice(0, 800);
-            } catch (err) {
+            } catch(err) {
                 botMsg.textContent = '⚠️ ' + err.message;
             }
             chat.scrollTop = chat.scrollHeight;
         }
 
-        // ===== ENTER KEY SHORTCUTS =====
+        // ===== ENTER =====
         document.querySelectorAll('.sx input').forEach(inp => {
             inp.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
@@ -1828,8 +477,7 @@
         // ===== ANTI INSPECT =====
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key)) ||
-                (e.ctrlKey && e.key === 'U')) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && e.key === 'U')) {
                 e.preventDefault();
                 document.getElementById('anti-inspect').classList.add('show');
                 setTimeout(() => document.getElementById('anti-inspect').classList.remove('show'), 3000);
